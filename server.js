@@ -14,6 +14,7 @@ const app = express();
 // Connect Database
 connectDB();
 
+
 // Init Middleware
 app.use(express.json({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,6 +30,7 @@ app.use(async (req, res, next) => {
           error: "JWT token has expired, please login to obtain a new one"
         });
       }
+
       res.locals.loggedInUser = await User.findById(userId);
       next();
     } catch (error) {

@@ -15,6 +15,7 @@ exports.roles = (function() {
   ac.grant("admin")
     .extend("basic")
     .extend("teamlead")
+    .grant("teamlead")
     .updateAny("products")
     .deleteAny("products")
 

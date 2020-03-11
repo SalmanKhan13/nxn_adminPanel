@@ -1,5 +1,6 @@
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
+const AccessControl = require("accesscontrol");
 const bcrypt = require('bcrypt');
 
 const {roles} = require('../roles')
@@ -16,7 +17,24 @@ async function validatePassword(plainPassword, hashedPassword) {
 exports.grantAccess = function (action, resource) {
     return async (req, res, next) => {
         try {
-            const permission = roles.can(req.user.role)[action](resource);
+            let grantList = [
+                { role: 'admin', resource: 'video', action: 'create:any', attributes: '*, !views' },
+                { role: 'admin', resource: 'video', action: 'read:any', attributes: '*' },
+                { role: 'admin', resource: 'video', action: 'update:any', attributes: '*, !views' },
+                { role: 'admin', resource: 'video', action: 'delete:any', attributes: '*' },
+             
+                { role: 'user', resource: 'video', action: 'create:own', attributes: '*, !rating, !views' },
+                { role: 'user', resource: 'video', action: 'read:any', attributes: '*' },
+                { role: 'user', resource: 'video', action: 'update:own', attributes: '*, !rating, !views' },
+                { role: 'user', resource: 'video', action: 'delete:own', attributes: '*' }
+            ];
+            const ac = new AccessControl(grantList);
+            ac.setGrants(grantList);
+            console.log(ac.getGrants());
+
+
+
+            const permission = roles.can(req.user.roles)[action](resource);
             if (!permission.granted) {
                 return res.status(401).json({
                     error: "You don't have enough permission to perform this action"
@@ -46,22 +64,29 @@ exports.allowIfLoggedin = async (req, res, next) => {
 exports.signup = async (req, res, next) => {
     try {
         const {
-            email,
-            password,
-            role
-        } = req.body
+             email,
+             password,
+             roles
+        } = req.body;
+        
+        
         const hashedPassword = await hashPassword(password);
         const newUser = new User({
             email,
             password: hashedPassword,
-            role: role || "basic"
+            roles: req.body
+          //  role: role || "basic"
         });
+       
+        //console.log(newUser);
         const accessToken = jwt.sign({
             userId: newUser._id
         }, process.env.JWT_SECRET, {
             expiresIn: "1d"
-        });
+        }); 
+        
         newUser.accessToken = accessToken;
+        console.log(newUser);
         await newUser.save();
         res.json({
             data: newUser,
