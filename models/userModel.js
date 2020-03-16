@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
@@ -14,29 +14,33 @@ const UserSchema = new Schema({
   accessToken: {
     type: String
   },
-  // role: {
-  //   type: String,
-  //   default: 'basic',
-  //   enum: ["basic", "teamlead", "admin"]
-  // },
+
   roles: [
     {
-    role: {
-      type: String
-    },
-    resource: {
-      type: String
-    },
-    actions: {
-      type: String
-    },
-    attributes: {
-      type: String
+      role: {
+        type: String
+      },
+      resource: {
+        type: String
+      },
+      action: {
+        type: Array
+       
+      },
+      attributes: {
+        type: String
+      },
+      extend:{
+        type:String
+      }
     }
-  }
-]
-})
+  ]
+});
 
-
-const User = mongoose.model('user', UserSchema)
+// role: {
+//   type: String,
+//   default: 'basic',
+//   enum: ["basic", "teamlead", "admin"]
+// },
+const User = mongoose.model("user", UserSchema);
 module.exports = User;
