@@ -45,5 +45,5 @@ const UserSchema = new Schema({
 //   default: 'basic',
 //   enum: ["basic", "teamlead", "admin"]
 // },
-const User = mongoose.model("user", UserSchema);
-module.exports = User;
+const Users = mongoose.model("users", UserSchema);
+module.exports = Users;
