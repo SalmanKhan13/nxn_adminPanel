@@ -1,7 +1,12 @@
-const User = require("../models/userModel");
+//const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const AccessControl = require("accesscontrol");
 const bcrypt = require("bcrypt");
+const { validationResult } = require('express-validator');
+const User = require('../models/user.model.js');
+const usersPath = 'internal-admin/pages/users';
+const fs = require('fs');
+const csv = require('csv-parser');
 
 //const {roles} = require('../roles')
 
@@ -17,12 +22,9 @@ async function validatePassword(plainPassword, hashedPassword) {
 exports.grantAccess = function() {
   return async (req, res, next) => {
     try {
-   //   console.log("can it hiiiiiiiiiiiiiiiiitttttttt");
+   
       const user = res.locals.loggedInUser;
     //  console.log('test2--------- ',user.roles);
-      
-     
-
                let grantList = [];
        for (var i = 0; i < user.roles.length; i++) {
         //  user.roles[i].resource.forEach(x=>{
@@ -55,10 +57,10 @@ exports.grantAccess = function() {
         // })
         //   
 
-       const permission = ac.can(req.user.roles);  //[action](resource);
-       //console.log(permission);
-       console.log(ac.getGrants());
-        console.log("permission granted ",permission.granted)
+       const permission = ac.can(req.user.roles)[action](resource);
+       console.log(permission);
+       //console.log(ac.getGrants());
+        //console.log("permission granted ",permission.granted)
       if (!permission.granted) {
          console.log(!permission.granted)
         return res.status(401).json({
@@ -88,11 +90,14 @@ exports.allowIfLoggedin = async (req, res, next) => {
 
 exports.signup = async (req, res, next) => {
   try {
-    const { email, password, roles } = req.body;
+    const { email, password, role,resource,readAny } = req.body;
 
     const hashedPassword = await hashPassword(password);
     const newUser = new User({
       email,
+      role,
+      resource,
+      readAny,
       password: hashedPassword,
       roles: req.body
       //  role: role || "basic"
@@ -211,6 +216,62 @@ exports.deleteUser = async (req, res, next) => {
     next(error);
   }
 };
+
+/*
+ |--------------------------------------------------------------------------
+ | Search from Users list
+ |--------------------------------------------------------------------------
+*/
+exports.searchUser = async function(req, res) {
+
+  if ( !req.query.search ) {
+      res.json([]);
+      return;
+  }
+
+  try {
+      const users = await User.aggregate([
+              {
+                  $match: {
+                      email: { $regex: req.query.search, $options: 'i' }
+                  }
+              },
+              {
+                  $project: {
+                      _id: 1,
+                      first_name: 1,
+                      last_name: 1,
+                      username: 1,
+                      email: 1,
+                  }
+              }
+          ]);
+
+      res.json(users);
+
+  } catch ( err ) {
+      console.error(err);
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // const values= user.roles.map(value=>{

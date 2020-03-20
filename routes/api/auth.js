@@ -4,9 +4,31 @@ const bcrypt = require('bcryptjs');
 const auth = require('../../middleware/auth');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const { check, validationResult } = require('express-validator/check');
+const { check, validationResult } = require('express-validator');
 
 const User = require('../../models/User');
+const productController = require('../../controllers/products.controller');
+
+// .single('csvFile')
+const upload = require('../../middleware/products.fileupload.js');
+
+const productsUploadRules = [
+  check('user_email')
+    .not()
+    .isEmpty()
+    .withMessage('User Email is required.'),
+  check('catalog')
+    .not()
+    .isEmpty()
+    .withMessage('Please Select Catalog First.')
+];
+
+// @route    POST api/auth/
+// @desc     Upload Product
+// @access   Public
+router.post('/import', auth, upload.fileUpload, productsUploadRules, productController.upload);
+
+
 // @route    GET api/auth
 // @desc     Test route
 // @access   Public
@@ -75,4 +97,4 @@ router.get('/', auth, async (req, res) => {
       }
     }
   );
-  
+  module.exports = router;
