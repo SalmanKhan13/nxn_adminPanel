@@ -7,7 +7,8 @@ import Dashboard from '../dashboard/Dashboard';
 import NotFound from '../layout/NotFound';
 import PrivateRoute from '../routing/PrivateRoute';
 
-const Routes = () => {
+const Routes = (props) => {
+  console.log('routing props', props)
   return (
     <section className='container'>
       <Alert />

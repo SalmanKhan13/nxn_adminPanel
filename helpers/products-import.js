@@ -1,6 +1,6 @@
 const productHelper = require('./product');
-var EmailTemplate = require('./email-send'); // Contain email templates
-var _ = require('underscore'); // used Underscore for template settings
+const EmailTemplate = require('./email-send'); // Contain email templates
+const _ = require('underscore'); // used Underscore for template settings
 const fs = require('fs');
 const csv = require('csv-parser');
 const csvWriter = require('csv-writer');
@@ -41,7 +41,6 @@ exports.Import = (req, res) => {
             this.catalogId = fields.catalogId;
             this.mailReceipt = fields.email || 'shakeel.latif@pk.see.biz' ;
             this.readCsvFile(file);
-
         },
         readCsvFile(file) {
             this.readStream = fs.createReadStream(file.path);
@@ -210,7 +209,7 @@ exports.Import = (req, res) => {
                     // as many checks can be added to further validate the url...
                     urlMapping.push({status: imageUrl.match(/\.(jpeg|jpg|gif|png)$/i) ? true : false, url: trimmedUrl});
                 } catch (err) {
-                    urlMapping.push({status: false, url: trimmedUrl});
+                    urlMapping.push({status: false, url: originalUrl});
                 }
             });
 

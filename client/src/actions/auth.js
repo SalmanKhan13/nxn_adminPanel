@@ -21,15 +21,12 @@ export const loadUser = () => async dispatch => {
 
   try {
     const res = await axios.get("/api/auth");
+    
+    console.log('load user api called', res);
 
-    dispatch({
-      type: USER_LOADED,
-      payload: res.data
-    });
+    dispatch({ type: USER_LOADED, payload: res.data });
   } catch (err) {
-    dispatch({
-      type: AUTH_ERROR
-    });
+    dispatch({ type: AUTH_ERROR });
   }
 };
 
@@ -67,23 +64,21 @@ export const register = ({ name, email, password }) => async dispatch => {
 
 // Login User
 export const login = (email, password) => async dispatch => {
-  const config = {
-    headers: {
-      "Content-Type": "application/json"
-    }
-  };
-
+  console.log('login: ', email, password);
+  
+  const config = { headers: { "Content-Type": "application/json" } };
+  
   const body = JSON.stringify({ email, password });
 
   try {
     const res = await axios.post("/api/auth", body, config);
 
-    dispatch({
-      type: LOGIN_SUCCESS,
-      payload: res.data
-    });
+    console.log('payload: ', res);
+
+    dispatch({type: LOGIN_SUCCESS, payload: res.data});
 
     dispatch(loadUser());
+
   } catch (err) {
     const errors = err.response.data.errors;
 
@@ -103,32 +98,17 @@ export const logout = () => dispatch => {
 };
 
 // Upload File
-export const upload = ({
-  user_email_doc,
-  user_email,
-  catalog,
-  csvFile
-}) => async dispatch => {
-  const config = {
-    headers: {
-      "Content-Type": "multipart/form-data"
-    }
-  };
- const body = {
-   user_email_doc:user_email_doc,
-   user_email:user_email,
-    catalog:catalog,
-     csvFile:csvFile};
- // console.log(body);
+export const upload = (body) => async dispatch => {
+ 
+  console.log('final body ready to send to server', body);
+ 
   try {
-    const res = await axios.post("api/auth/import", config, body);
-    console.log(res.data);
-    dispatch({
-      type: UPLOAD_SUCCESSFUL,
-      payload: res.data
-    });
+    const res = await axios.post("api/auth/import", body);
 
-    dispatch(loadUser());
+    dispatch({ type: UPLOAD_SUCCESSFUL });    
+
+    dispatch(setAlert(res.data.message, res.data.status, 20000));
+
   } catch (err) {
     const errors = err.response.data.errors;
 
@@ -136,8 +116,44 @@ export const upload = ({
       errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
     }
 
-    dispatch({
-      type: UPLOAD_FAIL
-    });
+    dispatch({ type: UPLOAD_FAIL });
   }
 };
+
+export const searchUsers = (search, callback) => async dispatch => {
+  try {
+    const res = await axios.get("api/users/search?search=" + search);
+    
+    dispatch({ type: UPLOAD_SUCCESSFUL });
+    
+    callback(res.data);
+
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
+    }
+
+    dispatch({ type: UPLOAD_FAIL });
+  }
+}
+
+export const searchCatalogs = (userId, callback) => async dispatch => {
+  try {
+    const res = await axios.get("api/catalogs/search/" + userId);
+    
+    dispatch({ type: UPLOAD_SUCCESSFUL });
+    
+    callback(res.data.catalogs);
+
+  } catch (err) {
+    const errors = err.response.data.errors;
+
+    if (errors) {
+      errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
+    }
+
+    dispatch({ type: UPLOAD_FAIL });
+  }
+}

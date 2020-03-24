@@ -1,43 +1,69 @@
 import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
-//import {  Redirect } from 'react-router-dom';
-//import { setAlert } from '../../actions/alert';
-import {upload } from '../../actions/auth';
 import PropTypes from 'prop-types';
+import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
+import { upload, searchUsers, searchCatalogs } from '../../actions/auth';
 
-const Dashboard = ({upload,isAuthenticated}) => {
-  const [file,setFile]=useState({});
-  const [formData, setFormData] = useState({
-    user_email_doc: "",
-    user_email: "",
-    catalog: "",
-   // file
-  });
+const Dashboard = (props) => {
+  const { upload, searchUsers, searchCatalogs } = props;
 
-  const { user_email_doc, user_email, catalog } = formData;
+  // console.log('dashboard props: ', props);
+  
+  const [uploadFormData, setUploadFormData] = useState({user_email_doc: "", user_email: "", catalog: "", csvFile: null});
+  const [catalogsList, setCatalogsList] = useState([]);
 
-  const onChange = e =>{
-    
-    setFile(e.target.files[0]);
-   setFormData({ ...formData, [e.target.name]: e.target.value });
+  console.log('catalogs, setCatalogs: ', catalogsList, setCatalogsList);
+
+  let usersList = [];
+
+  // search users - loading emails...
+  const loadOptions = (inputValue, callback) => {
+    if (!inputValue) {
+      callback(usersList);
+    } else {
+      searchUsers(inputValue, (users) => {
+        usersList = users.map(user => ({label: user.email, value: user._id}));
+        callback(usersList);
+      });
+    }
+  };
+
+  const onSearchChange = (selectedItem, event) => {
+    if ( selectedItem == null && event.action == "clear" ) {
+      // clear event is fired, reset the selected item...
+      usersList = [];
+    } else {
+      // item is selected, set state here...
+      if ( event.name == "user_email" ) {
+        searchCatalogs(selectedItem.value, (catalogs) => {
+          setCatalogsList(catalogs.map(catalog => ({label: catalog.slug, value: catalog._id})));
+        });
+      }
+      // update state...
+      setUploadFormData({ ...uploadFormData, [event.name]: selectedItem.value });
+    }
+  };
+
+  const onCatalogChange = (selectedCatalog, event) => {
+    console.log('onCatalogChange: ', selectedCatalog);
+    setUploadFormData({ ...uploadFormData, [event.name]: selectedCatalog.value });
+  };
+
+  const onFileChange = e => {
+    setUploadFormData({ ...uploadFormData, [e.target.name]: e.currentTarget.files[0] });
   }
+
   const onSubmit = async e => {
     e.preventDefault();
     const formData = new FormData();
-     // formData.append('user_email_doc', user_email_doc);
-    // formData.append('user_email', user_email);
-    // formData.append('catalog', catalog);
-     formData.append('csvFile', file);
-
-    // setAlert('Passwords do not match', 'danger');
-    console.log(formData);
-    upload( formData);
-    console.log("Success");
+    console.log('finally submitting form: ', uploadFormData);
+    formData.append('user_email_doc', uploadFormData.user_email_doc);
+    formData.append('user_email', uploadFormData.user_email);
+    formData.append('catalog', uploadFormData.catalog);
+    formData.append('csvFile', uploadFormData.csvFile);
+    upload(formData);
   };
-
-  //   if (isAuthenticated) {
-  //     return <Redirect to='/dashboard' />;
-  //  }
 
   return (
     <Fragment>
@@ -45,119 +71,33 @@ const Dashboard = ({upload,isAuthenticated}) => {
       <p className="lead">
         <i className="fas fa-user" /> Upload your files here!
       </p>
-      <form className="form" onSubmit={e => onSubmit(e)}>
+      <form className="form" onSubmit={onSubmit}>
+        
         <div className="form-group">
           <label htmlFor="user_email_doc">Email address (document)</label>
-          <input
-            type="email"
-            placeholder="email "
-            name="user_email_doc"
-            id="user_email_doc"
-            value={user_email_doc}
-            onChange={e => onChange(e)}
-          />
-          {/* <select
-            name="email"
-            value={email}
-            id="email"
-            onChange={e => onChange(e)}
-          >
-            <option value="0">* select email</option>
-            <option value="cleaning-supplies">cleaning-supplies</option>
-            <option value="women-clothing">women-clothing</option>
-            <option value="gaming-accessories">gaming-accessories</option>
-            <option value="women-shoes">women-shoes</option>
-            <option value="socks">Student or Learning</option>
-            <option value="women-accessories">
-              women-accessories or Teacher
-            </option>
-            <option value="candy">candy</option>
-            <option value="mens-clothing">mens-clothing</option>
-            <option value="test-product">test-product</option>
-            <option value="demo-testing">demo-testing</option>
-            <option value="smoke">smoke</option>
-            <option value="new-catalog">new-catalog</option>
-            <option value="test">test</option>
-          </select> */}
-          <small id="emailHelp1" className="form-text text-muted">
-            This email is used to get an email if anything goes wrong.
+          <AsyncSelect placeholder="Select your catalog" loadingMessage={() => "Searching through users"} name="user_email_doc" id="user_email_doc" onChange={onSearchChange} isClearable defaultOptions={false} loadOptions={loadOptions} />
+          <small id="user_email_doc" className="form-text text-muted">
+            This email is used to to send document.
           </small>
         </div>
 
         <div className="form-group">
           <label htmlFor="user_email">Email address</label>
-          <input
-            type="email"
-            placeholder="email catalog"
-            name="user_email"
-            id="user_email"
-            value={user_email}
-            onChange={e => onChange(e)}
-          />
-
-          {/* <select
-            name="user_email"
-            value={user_email}
-            id="user_email"
-            onChange={e => onChange(e)}
-          >
-            <option value="0">* select email</option>
-            <option value="cleaning-supplies">cleaning-supplies</option>
-            <option value="women-clothing">women-clothing</option>
-            <option value="gaming-accessories">gaming-accessories</option>
-            <option value="women-shoes">women-shoes</option>
-            <option value="socks">Student or Learning</option>
-            <option value="women-accessories">
-              women-accessories or Teacher
-            </option>
-            <option value="candy">candy</option>
-            <option value="mens-clothing">mens-clothing</option>
-            <option value="test-product">test-product</option>
-            <option value="demo-testing">demo-testing</option>
-            <option value="smoke">smoke</option>
-            <option value="new-catalog">new-catalog</option>
-            <option value="test">test</option>
-          </select> */}
-          <small id="emailHelp1" className="form-text text-muted">
+          <AsyncSelect placeholder="Select your catalog" loadingMessage={() => "Searching through users"} name="user_email" id="user_email" onChange={onSearchChange} isClearable defaultOptions loadOptions={loadOptions} />
+          <small id="user_email" className="form-text text-muted">
             This email is used to get an email if anything goes wrong.
           </small>
         </div>
+        
         <div className="form-group">
-          <label htmlFor="catalog">Catalog</label>
-          <select
-            name="catalog"
-            value={catalog}
-            id="catalog"
-            onChange={e => onChange(e)}
-          >
-            <option value="0">* select catalog</option>
-            <option value="cleaning-supplies">cleaning-supplies</option>
-            <option value="women-clothing">women-clothing</option>
-            <option value="gaming-accessories">gaming-accessories</option>
-            <option value="women-shoes">women-shoes</option>
-            <option value="socks">Student or Learning</option>
-            <option value="women-accessories">
-              women-accessories or Teacher
-            </option>
-            <option value="candy">candy</option>
-            <option value="mens-clothing">mens-clothing</option>
-            <option value="test-product">test-product</option>
-            <option value="demo-testing">demo-testing</option>
-            <option value="smoke">smoke</option>
-            <option value="new-catalog">new-catalog</option>
-            <option value="test">test</option>
-          </select>
-          <label htmlFor="file">File</label>
+          <label htmlFor="catalog">Catalog*</label>
+          <Select name="catalog" options={catalogsList} onChange={onCatalogChange}/>
         </div>
+
         <div className="form-group">
-          <input
-            type="file"
-            placeholder="Choose File"
-            name="csvFile"
-            id="csvfile"
-            onChange={e => onChange(e)}
-          />
+          <input type="file" placeholder="Choose File" name="csvFile" id="csvfile" onChange={onFileChange} />
         </div>
+
         <input type="submit" className="btn btn-primary" value="Upload" />
       </form>
     </Fragment>
@@ -165,16 +105,16 @@ const Dashboard = ({upload,isAuthenticated}) => {
 };
 
 Dashboard.propTypes = {
-  //setAlert: PropTypes.func.isRequired,
  upload: PropTypes.func.isRequired,
-//  isAuthenticated: PropTypes.bool
+ searchUsers: PropTypes.func.isRequired,
+ searchCatalogs: PropTypes.func.isRequired,
+ isAuthenticated: PropTypes.bool,
+ user: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
-   isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user
 });
 
-export default connect(
-  mapStateToProps,
-  { upload }
-)(Dashboard);
+export default connect(mapStateToProps, { upload, searchUsers, searchCatalogs })(Dashboard);

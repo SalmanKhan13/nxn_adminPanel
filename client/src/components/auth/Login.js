@@ -4,11 +4,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { login } from '../../actions/auth';
 
-const Login = ({ login, isAuthenticated }) => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: ''
-  });
+const Login = (props) => {
+  
+  console.log(' login props: ', props);
+
+  const { login, isAuthenticated } = props;
+
+  const [formData, setFormData] = useState({email: '', password: ''});
 
   const { email, password } = formData;
 
@@ -65,11 +67,20 @@ Login.propTypes = {
   isAuthenticated: PropTypes.bool
 };
 
-const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
-});
+const mapStateToProps = state => {
+  // console.log('state: ', state);
+  return {
+    isAuthenticated: state.auth.isAuthenticated
+  }
+};
 
-export default connect(
-  mapStateToProps,
-  { login }
-)(Login);
+// const mapDispatchToProps = state => {
+//   // console.log('state: ', state);
+//   return {
+//     login: state.login
+//   }
+// };
+
+// export default Login;
+// export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, { login })(Login);

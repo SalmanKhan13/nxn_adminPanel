@@ -1,29 +1,33 @@
-const { validationResult } = require('express-validator');
+const User = require('../models/user.model');
 const Catalog = require('../models/catalog.model');
-const catalogsPath = 'internal-admin/pages/catalogs';
 
 /*
  |--------------------------------------------------------------------------
- | Get catalogs List
+ | catalog list for a particular user
  |--------------------------------------------------------------------------
 */
-exports.catalogsList = async function(req, res) {
+exports.findCatalogsByUserId = async function(req, res) {
     try {
-        const catalogs = await Catalog.aggregate([
-                    {
-                        $project: {
-                            catalogCategory: 1,
-                            slug: 1,
-                            type: 1,
-                            description: 1,
-                            createdDate: { "$dateToString": { format:"%Y-%m-%d %H:%M:%S", date:"$updatedDate", timezone:'+05:00', onNull: 'N/A' } },
-                            updatedDate: { "$dateToString": { format:"%Y-%m-%d %H:%M:%S", date:"$updatedDate", timezone:'+05:00', onNull: 'N/A' } }
-                        }
+        if ( req.params.userId ) {
+            const user = await User.findOne({ _id: req.params.userId }, {username:1});
+            if ( user ) {
+                Catalog.find({userId: user._id}, ['slug', '_id'], (err, docs) => {
+                    if ( err ) {
+                        res.end(JSON.stringify({status: false}));
+                    } else {
+                        res.end(JSON.stringify({status: true, catalogs: docs}));
                     }
-                ]);
-      //  res.render(`${catalogsPath}/index`, { catalogs });
-      console.log("it's coming from catalog.controller.js")
-    } catch ( err ) {
-        console.error(err);
+                });
+            } else {
+                res.end(JSON.stringify({status: false}));
+            }
+        }
+        else {
+            throw Error('Please provide UserId');
+        }
+    }
+    catch (e) {
+        console.log(e);
+        return res.status(500).end(e.message);
     }
 };

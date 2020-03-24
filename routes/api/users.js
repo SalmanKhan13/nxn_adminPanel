@@ -5,6 +5,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const User = require('../../models/User');
+const controllers = require('../../controllers/userController');
 
 
 // @route    POST api/users
@@ -73,6 +74,10 @@ router.post(
     }
   );
 
+// @route    Get api/users/search
+// @desc     Search User through email address
+// @access   private
+router.get('/search', controllers.searchUser);
 
 
 module.exports = router;
