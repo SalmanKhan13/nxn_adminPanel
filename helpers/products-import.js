@@ -70,8 +70,8 @@ exports.Import = (req, res) => {
                 this.csvFileHeader.push({id: 'reason', title: 'reason'});
             }
         },
-        addslashes(string) {
-            return string.replace(/\\/g, '\\\\').
+        addslashes(str) {
+            return str.replace(/\\/g, '\\\\').
                 replace(/\u0008/g, '\\b').
                 replace(/\uFFFD/g, ''). // null or invalid characters �
                 replace(/\t/g, '\\t').
@@ -207,7 +207,7 @@ exports.Import = (req, res) => {
                     const imageUrl = decodeURIComponent(trimmedUrl);
                     const url = new URL(imageUrl);
                     // as many checks can be added to further validate the url...
-                    urlMapping.push({status: imageUrl.match(/\.(jpeg|jpg|gif|png)$/i) ? true : false, url: trimmedUrl});
+                    urlMapping.push({ status: imageUrl.split('?')[0].match(/\.(jpeg|jpg|gif|png|webp)$/i) ? true : false, url: trimmedUrl });
                 } catch (err) {
                     urlMapping.push({status: false, url: originalUrl});
                 }

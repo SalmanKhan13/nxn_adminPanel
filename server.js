@@ -1,6 +1,7 @@
 const express = require('express');
 const connectDB = require('./config/db');
 const path = require('path');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 //const User = require('./models/userModel')
@@ -14,8 +15,8 @@ const app = express();
 // Connect Database
 connectDB();
 
-
 // Init Middleware
+app.use(cors({origin: true, credentials: true}));
 app.use(express.json({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: true }));
 

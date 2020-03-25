@@ -13,8 +13,6 @@ const Dashboard = (props) => {
   const [uploadFormData, setUploadFormData] = useState({user_email_doc: "", user_email: "", catalog: "", csvFile: null});
   const [catalogsList, setCatalogsList] = useState([]);
 
-  console.log('catalogs, setCatalogs: ', catalogsList, setCatalogsList);
-
   let usersList = [];
 
   // search users - loading emails...
@@ -30,12 +28,12 @@ const Dashboard = (props) => {
   };
 
   const onSearchChange = (selectedItem, event) => {
-    if ( selectedItem == null && event.action == "clear" ) {
+    if ( selectedItem === null && event.action === "clear" ) {
       // clear event is fired, reset the selected item...
       usersList = [];
     } else {
       // item is selected, set state here...
-      if ( event.name == "user_email" ) {
+      if ( event.name === "user_email" ) {
         searchCatalogs(selectedItem.value, (catalogs) => {
           setCatalogsList(catalogs.map(catalog => ({label: catalog.slug, value: catalog._id})));
         });
@@ -46,7 +44,6 @@ const Dashboard = (props) => {
   };
 
   const onCatalogChange = (selectedCatalog, event) => {
-    console.log('onCatalogChange: ', selectedCatalog);
     setUploadFormData({ ...uploadFormData, [event.name]: selectedCatalog.value });
   };
 
@@ -57,7 +54,6 @@ const Dashboard = (props) => {
   const onSubmit = async e => {
     e.preventDefault();
     const formData = new FormData();
-    console.log('finally submitting form: ', uploadFormData);
     formData.append('user_email_doc', uploadFormData.user_email_doc);
     formData.append('user_email', uploadFormData.user_email);
     formData.append('catalog', uploadFormData.catalog);
