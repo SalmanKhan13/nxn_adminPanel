@@ -71,7 +71,7 @@ const Dashboard = (props) => {
         
         <div className="form-group">
           <label htmlFor="user_email_doc">Email address (document)</label>
-          <AsyncSelect placeholder="Select your catalog" loadingMessage={() => "Searching through users"} name="user_email_doc" id="user_email_doc" onChange={onSearchChange} isClearable defaultOptions={false} loadOptions={loadOptions} />
+          <AsyncSelect placeholder="Select Email you Receive" loadingMessage={() => "Searching through users"} name="user_email_doc" id="user_email_doc" onChange={onSearchChange} isClearable defaultOptions={false} loadOptions={loadOptions} />
           <small id="user_email_doc" className="form-text text-muted">
             This email is used to to send document.
           </small>
