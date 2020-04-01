@@ -1,15 +1,13 @@
 const productHelper = require('./product');
 const EmailTemplate = require('./email-send'); // Contain email templates
-const _ = require('underscore'); // used Underscore for template settings
 const fs = require('fs');
 const csv = require('csv-parser');
 const csvWriter = require('csv-writer');
 const shortId = require('shortid');
 const sharp = require('sharp');
-const randomString = require('random-string');
 const request = require('request');
 const async = require('async');
-const URL = require("url").URL;
+// const URL = require("url").URL;
 const path = require('path');
 
 const Product = require('../models/product.model');
@@ -183,18 +181,19 @@ exports.Import = (req, res) => {
         },
         formatProduct(product)
         {
+            // remove $ from value...
             price = parseFloat(product.Selling_Price.replace(/\$/g, ""));
 
             return {
-                title: product.Product_Name,
-                slug: product.slugPrefix + '-' + productHelper.createSlug(product.Product_Name),
+                title: product.Product_Name.trim(),
+                slug: product.slugPrefix + '-' + productHelper.createSlug(product.Product_Name.trim()),
                 price: isNaN(price) ? 0 : price,
-                sku: product.SKU,
+                sku: product.SKU.trim(),
                 upc: product.UPC || '',
                 brand: product.Brand || '',
                 manufacturer: product.Manufacturer || '',
                 totalCost: product.Purchase_Price || 0,
-                description: product.Product_Description || '',
+                description: product.Product_Description.trim() || '',
             }
         },
         validateImageUrls(urlString)
@@ -218,27 +217,56 @@ exports.Import = (req, res) => {
         removeDuplicateProducts()
         {
             return new Promise((resolve, reject) => {
-                let productSkus = this.products.map(({ SKU }) => SKU);
+                var fileDuplicates = [];
+                // remove file duplicates...
+                const filteredArr = this.products.reduce((acc, current) => {
+                    const x = acc.find(item => item.SKU === current.SKU);
+                    if (!x) {
+                        return acc.concat([current]);
+                    } else {
+                        fileDuplicates.push(x);
+                        return acc;
+                    }
+                }, []);
+
+                this.duplicateProducts = fileDuplicates;
+                
+                let productSkus = filteredArr.map(({ SKU }) => SKU);
                 const finalProducts = [];
-                Product.find({merchant_id: this.userId, sku: { $in: productSkus }}, {'sku':1, '_id':0}).exec((err, docs) => {
-                    if ( err ) reject({msg: 'unable to check products in database.'});
-                    if ( docs && docs.length ) {
+
+                Product.find({ merchant_id: this.userId, sku: { $in: productSkus } }, { 'sku': 1, '_id': 0 }).exec((err, docs) => {
+                    if (err) reject({ msg: 'unable to check products in database.' });
+                    if (docs && docs.length) {
                         const duplicates = [];
                         fetchedDocs = docs.map(({ sku }) => sku);
                         productSkus.forEach(item => {
-                            const product = this.products.find(({SKU}) => SKU === item);
-                            if ( !fetchedDocs.includes(item) ) {
+                            const product = filteredArr.find(({ SKU }) => SKU === item);
+                            if (!fetchedDocs.includes(item)) {
                                 finalProducts.push(product);
                             } else {
                                 duplicates.push(product);
                             }
                         });
-                        this.duplicateProducts = duplicates;
+                        fileDuplicates = fileDuplicates.concat(duplicates);
+                        // remove duplicates for email...
+                        const filterDuplicatesArray = fileDuplicates.reduce((acc, current) => {
+                            const x = acc.find(item => item.SKU === current.SKU);
+                            if (!x) {
+                                return acc.concat([current]);
+                            } else {
+                                return acc;
+                            }
+                        }, []);
+                        
+                        // console.log('FILTERED PRDUCTS ARRAY ========================: ', finalProducts.map(item => item.SKU));
+
+                        this.duplicateProducts = filterDuplicatesArray;
                         // resolve(this.products);
                         resolve(finalProducts);
                     }
                     else {
-                        resolve(this.products);
+                        // console.log('filtered Array =======', filteredArr.map(item => item.SKU));
+                        resolve(filteredArr);
                     }
                 });
             });
@@ -303,7 +331,7 @@ exports.Import = (req, res) => {
 
             async.forEachOf(validUrls, async (imageUrl, index) => {
                 try {
-                    const resolvedImage = await fetchImage(imageUrl, `${productImageName}-${index}`, index);
+                    const resolvedImage = await fetchImage(imageUrl, `${productImageName.trim()}-${index}`, index);
                     imageFiles.unshift(resolvedImage.data);
                 } catch(err) {
                     imageFilesErrorMessage.push(`${imageUrl}: ${err.message}`);
@@ -346,7 +374,7 @@ exports.Import = (req, res) => {
                             let type = response.headers['content-type'];
                             type = type.includes("application/save") ? 'image/jpeg' : type;
 
-                            if ( type.toLowerCase().match(/(jpeg|jpg|gif|png)$/) ) {
+                            if ( type.toLowerCase().match(/(jpeg|jpg|gif|png|webp)$/) ) {
 
                                 async function getFileMetaData(buffer) {
                                     const metaReader = sharp(body);
@@ -393,7 +421,7 @@ exports.Import = (req, res) => {
                                             );
                                         });
         
-                                        // // start upload procedure... if main image failed to upload, no need to upload different sizes...
+                                        // start upload procedure... if main image failed to upload, no need to upload different sizes...
                                         uploadFilePromises.shift().then(file => {
                                             Promise.all(uploadFilePromises.map(p => p.catch(e => e)))
                                             .then(results => {
