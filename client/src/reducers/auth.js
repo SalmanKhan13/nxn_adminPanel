@@ -7,7 +7,11 @@ import {
   LOGOUT,
   LOGIN_SUCCESS,
   UPLOAD_SUCCESSFUL,
-  UPLOAD_FAIL
+  UPLOAD_FAIL,
+  VERIFICATION_LINK_SEND,
+  VERIFICATION_LINK_NOT_SEND,
+  PASSWORD_UPDATED,
+  PASSWORD_NOT_SET
 } from "../actions/types";
 
 const initialState = {
@@ -37,7 +41,11 @@ export default function(state = initialState, action) {
       localStorage.removeItem("user");
       return { ...state, token: null, isAuthenticated: false, user: null };
     case UPLOAD_FAIL:
-      return state; // should be a local state...
+    case VERIFICATION_LINK_NOT_SEND:
+    case VERIFICATION_LINK_SEND:
+    case PASSWORD_UPDATED:
+    case PASSWORD_NOT_SET:
+     return state; // should be a local state...
     default:
       return state;
   }

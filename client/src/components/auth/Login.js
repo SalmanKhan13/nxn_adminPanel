@@ -54,6 +54,10 @@ const Login = (props) => {
           />
         </div>
         <input type='submit' className='btn btn-primary' value='Login' />
+        <Link to='/resetpassword'>
+          <i className='fas fa-user' />{' '}
+          <span className='hide-sm'>Forgot Password</span>
+        </Link>
       </form>
       <p className='my-1'>
         Don't have an account? <Link to='/register'>Sign Up</Link>
@@ -68,19 +72,10 @@ Login.propTypes = {
 };
 
 const mapStateToProps = state => {
-  // console.log('state: ', state);
+  
   return {
     isAuthenticated: state.auth.isAuthenticated
   }
 };
 
-// const mapDispatchToProps = state => {
-//   // console.log('state: ', state);
-//   return {
-//     login: state.login
-//   }
-// };
-
-// export default Login;
-// export default connect(mapStateToProps, mapDispatchToProps)(Login);
 export default connect(mapStateToProps, { login })(Login);

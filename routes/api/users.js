@@ -4,8 +4,9 @@ const { check, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config');
-const User = require('../../models/User');
+const Users = require('../../models/Users');
 const controllers = require('../../controllers/userController');
+const {forgotPasswordValidator,resetPasswordValidator} = require('../../helpers/valid');
 
 
 // @route    POST api/users
@@ -32,7 +33,7 @@ router.post(
       const { name, email, password } = req.body;
   
       try {
-        let user = await User.findOne({ email });
+        let user = await Users.findOne({ email });
   
         if (user) {
           return res
@@ -40,7 +41,7 @@ router.post(
             .json({ errors: [{ msg: 'User already exists' }] });
         }
   
-        user = new User({
+        user = new Users({
           name,
           email,
           password
@@ -78,6 +79,16 @@ router.post(
 // @desc     Search User through email address
 // @access   private
 router.get('/search', controllers.searchUser);
+
+// @route    PUT api/users/forgotpassword
+// @desc     Forgot Password
+// @access   Public
+router.put('/forgotpassword', forgotPasswordValidator, controllers.forgotPasswordController);
+
+// @route    PUT api/users/resetpassword
+// @desc     Reset Password
+// @access   Public
+router.put('/resetpassword', resetPasswordValidator, controllers.resetPasswordController);
 
 
 module.exports = router;
