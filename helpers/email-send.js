@@ -14,25 +14,24 @@ var awsBucketBasePath = "https://seebiz-images.s3.amazonaws.com";
  | CSV File Records Feedback
  |--------------------------------------------------------------------------
 */
-exports.csvFileRecordsFeedback = function(userInfo) {
+exports.csvFileRecordsFeedback = function (userInfo) {
 
-    var homeUrl = config[environment].clientHost;
-    userInfo.homeUrl = homeUrl;
-  
-    Mail.productsUploadFeedback(userInfo.email, csvFileRecordsFeedbackTemplate(userInfo), userInfo.attachments, (err, data) => {
-      if (err) {
-        console.log('err: ' + err);
-      }
-    });
-  };
+  var homeUrl = config[environment].clientHost;
+  userInfo.homeUrl = homeUrl;
 
-  function csvFileRecordsFeedbackTemplate(userInfo) {
-    // Find Thank you email template
-    var path = require('path').join(__dirname, '../app/views/email-template/feedback-products-bulk.html');
-  
-    // Read file synchronously and encode it 'utf8'
-    var html = require('fs').readFileSync(path, 'utf8');
-    var template = _.template(html);
-    return template({...userInfo, resourcePath: awsBucketBasePath});
-  }
-  
+  Mail.productsUploadFeedback(userInfo.email, csvFileRecordsFeedbackTemplate(userInfo), userInfo.attachments, (err, data) => {
+    if (err) {
+      console.log('err: ' + err);
+    }
+  });
+};
+
+function csvFileRecordsFeedbackTemplate(userInfo) {
+  // Find Thank you email template
+  var path = require('path').join(__dirname, '../app/views/email-template/feedback-products-bulk.html');
+
+  // Read file synchronously and encode it 'utf8'
+  var html = require('fs').readFileSync(path, 'utf8');
+  var template = _.template(html);
+  return template({ ...userInfo, resourcePath: awsBucketBasePath });
+}

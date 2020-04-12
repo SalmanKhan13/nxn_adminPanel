@@ -20,17 +20,17 @@ const initialState = {
   user: JSON.parse(localStorage.getItem("user"))
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
     case USER_LOADED:
-      localStorage.setItem("user", JSON.stringify(payload));  
-    return { ...state, isAuthenticated: true, user: payload };
+      localStorage.setItem("user", JSON.stringify(payload));
+      return { ...state, isAuthenticated: true, user: payload };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
       localStorage.setItem("token", payload.token);
-      return {...state, ...payload, isAuthenticated: true };
+      return { ...state, ...payload, isAuthenticated: true };
     case UPLOAD_SUCCESSFUL:
       return state; // should be a local state...
     case REGISTER_FAIL:
@@ -45,7 +45,7 @@ export default function(state = initialState, action) {
     case VERIFICATION_LINK_SEND:
     case PASSWORD_UPDATED:
     case PASSWORD_NOT_SET:
-     return state; // should be a local state...
+      return state; // should be a local state...
     default:
       return state;
   }

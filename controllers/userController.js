@@ -1,55 +1,47 @@
-//const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
-
 const User = require('../models/user.model.js');
 const Users = require('../models/Users');
-const usersPath = 'internal-admin/pages/users';
-const fs = require('fs');
-const csv = require('csv-parser');
 const { validationResult } = require('express-validator');
 const nodemailer = require('nodemailer');
 const _ = require('lodash');
-const config=require('config');
+const config = require('config');
 const bcrypt = require('bcryptjs');
-
 
 /*
  |--------------------------------------------------------------------------
  | Search from Users list
  |--------------------------------------------------------------------------
 */
-exports.searchUser = async function(req, res) {
+exports.searchUser = async function (req, res) {
 
-  if ( !req.query.search ) {
-      res.json([]);
-      return;
+  if (!req.query.search) {
+    res.json([]);
+    return;
   }
   try {
-      const users = await User.aggregate([
-              {
-                  $match: {
-                      email: { $regex: req.query.search, $options: 'i' }
-                  }
-              },
-              {
-                  $project: {
-                      _id: 1,
-                      first_name: 1,
-                      last_name: 1,
-                      username: 1,
-                      email: 1,
-                  }
-              }
-          ]);
-      res.json(users);
-  } catch ( err ) {
-      console.error(err);
+    const users = await User.aggregate([
+      {
+        $match: {
+          email: { $regex: req.query.search, $options: 'i' }
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          first_name: 1,
+          last_name: 1,
+          username: 1,
+          email: 1,
+        }
+      }
+    ]);
+    res.json(users);
+  } catch (err) {
+    console.error(err);
   }
 };
 
- 
-
-const transporter =  nodemailer.createTransport({
+const transporter = nodemailer.createTransport({
   service: "gmail",
   secure: "false",
   auth: {
@@ -64,15 +56,15 @@ const transporter =  nodemailer.createTransport({
 exports.forgotPasswordController = async (req, res) => {
   const { email } = req.body;
   const error = validationResult(req);
- 
+
   if (!error.isEmpty()) {
-    
+
     const firstError = error.array().map(err => err.msg)[0];
     return res.status(422).json({
       error: firstError
     });
   } else {
-   await  Users.findOne(
+    await Users.findOne(
       {
         email
       },
@@ -94,7 +86,7 @@ exports.forgotPasswordController = async (req, res) => {
         );
 
         const emailData = {
-          from:'salman.dev@pk.see.biz' ,
+          from: 'salman.dev@pk.see.biz',
           to: email,
           subject: `Password Reset link`,
           html: `
@@ -119,14 +111,14 @@ exports.forgotPasswordController = async (req, res) => {
               });
             } else {
 
-               res.json({
+              res.json({
                 message: `Email has been sent to ${email}. Follow the instruction to activate your account`
               });
-              
+
               return transporter.sendMail(emailData)
                 .then(sent => {
-                   console.log('SIGNUP EMAIL SENT', sent)
-                 
+                  console.log('SIGNUP EMAIL SENT', sent)
+
                 })
                 .catch(err => {
                   // console.log('SIGNUP EMAIL SENT ERROR', err)
@@ -154,7 +146,7 @@ exports.resetPasswordController = async (req, res) => {
     });
   } else {
     if (resetPasswordLink) {
-      jwt.verify(resetPasswordLink, config.get('jwtSecret'), function(
+      jwt.verify(resetPasswordLink, config.get('jwtSecret'), function (
         err,
         decoded
       ) {
@@ -168,17 +160,17 @@ exports.resetPasswordController = async (req, res) => {
           {
             resetPasswordLink
           },
-         async (err, user) => {
+          async (err, user) => {
             if (err || !user) {
               return res.status(400).json({
                 error: 'Something went wrong. Try Password again'
               });
             }
             const salt = await bcrypt.genSalt(10);
-  
-           user.password = await bcrypt.hash(newPassword, salt);
+
+            user.password = await bcrypt.hash(newPassword, salt);
             const updatedFields = {
-              
+
               password: user.password,
               resetPasswordLink: ''
             };
@@ -201,7 +193,3 @@ exports.resetPasswordController = async (req, res) => {
     }
   }
 };
-
-
-
-

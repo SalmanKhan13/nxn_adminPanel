@@ -5,12 +5,12 @@ import PropTypes from 'prop-types';
 import { login } from '../../actions/auth';
 
 const Login = (props) => {
-  
+
   console.log(' login props: ', props);
 
   const { login, isAuthenticated } = props;
 
-  const [formData, setFormData] = useState({email: '', password: ''});
+  const [formData, setFormData] = useState({ email: '', password: '' });
 
   const { email, password } = formData;
 
@@ -72,7 +72,6 @@ Login.propTypes = {
 };
 
 const mapStateToProps = state => {
-  
   return {
     isAuthenticated: state.auth.isAuthenticated
   }

@@ -6,20 +6,20 @@ const Catalog = require('../models/catalog.model');
  | catalog list for a particular user
  |--------------------------------------------------------------------------
 */
-exports.findCatalogsByUserId = async function(req, res) {
+exports.findCatalogsByUserId = async function (req, res) {
     try {
-        if ( req.params.userId ) {
-            const user = await User.findOne({ _id: req.params.userId }, {username:1});
-            if ( user ) {
-                Catalog.find({userId: user._id}, ['slug', '_id'], (err, docs) => {
-                    if ( err ) {
-                        res.end(JSON.stringify({status: false}));
+        if (req.params.userId) {
+            const user = await User.findOne({ _id: req.params.userId }, { username: 1 });
+            if (user) {
+                Catalog.find({ userId: user._id }, ['slug', '_id'], (err, docs) => {
+                    if (err) {
+                        res.end(JSON.stringify({ status: false }));
                     } else {
-                        res.end(JSON.stringify({status: true, catalogs: docs}));
+                        res.end(JSON.stringify({ status: true, catalogs: docs }));
                     }
                 });
             } else {
-                res.end(JSON.stringify({status: false}));
+                res.end(JSON.stringify({ status: false }));
             }
         }
         else {

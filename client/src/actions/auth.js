@@ -109,17 +109,17 @@ export const upload = body => async dispatch => {
   console.log("final body ready to send to server", body);
 
   try {
-     const res = await axios.post("api/auth/import", body);//, {
+    const res = await axios.post("api/auth/import", body);//, {
     //   onUploadProgress: progressEvent => {
     //     dispatch( Progress( parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total)))
     //     );
     //    // Clear percentage
     //     setTimeout(() => Progress(0), 10000);
     //   }
-      
+
     // });
     // console.log("onUploadProgress"+onUploadProgress+"progressEvent"+ progressEvent)
-    
+
     dispatch({ type: UPLOAD_SUCCESSFUL });
     dispatch(setAlert(res.data.message, res.data.status, 10000));
   } catch (err) {
@@ -169,71 +169,56 @@ export const searchCatalogs = (userId, callback) => async dispatch => {
   }
 };
 
-export const forgotpassword=(email) => async dispatch => {
- const config = {
-  headers: {
-    "Content-Type": "application/json"
-  }
-};
+export const forgotpassword = (email) => async dispatch => {
+  const config = {
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
 
-const body = JSON.stringify({ email });
+  const body = JSON.stringify({ email });
   try {
-    const res = await axios.put("api/users/forgotpassword",body,config);
+    const res = await axios.put("api/users/forgotpassword", body, config);
 
-    dispatch({
-      type: VERIFICATION_LINK_SEND,
-      payload: res.data
-    });
-  
-    
+    dispatch({ type: VERIFICATION_LINK_SEND, payload: res.data });
+
     dispatch(setAlert(res.data.message, "success", 10000));
-    
+
   } catch (err) {
     const errors = err.response.data.error;
     console.log(err.response.data.error);
     if (errors) {
-     // errors.forEach(error => dispatch(setAlert(error.message, "danger")));
+      // errors.forEach(error => dispatch(setAlert(error.message, "danger")));
       dispatch(setAlert(errors, "danger"));
     }
 
-    dispatch({
-      type: VERIFICATION_LINK_NOT_SEND
-    });
+    dispatch({ type: VERIFICATION_LINK_NOT_SEND });
   }
 }
 
-export const resetpassword=(password1,token) => async dispatch => {
+export const resetpassword = (password1, token) => async dispatch => {
   console.log("action hit")
   const config = {
-   headers: {
-     "Content-Type": "application/json"
-   }
- };
+    headers: {
+      "Content-Type": "application/json"
+    }
+  };
 
-   try {
-     const res = await axios.put("/api/users/resetpassword", {
-      newPassword: password1,
-      resetPasswordLink: token
-  },config);
- 
-     dispatch({
-       type: PASSWORD_UPDATED,
-       payload: res.data
-     });
-   
-     
-     dispatch(setAlert(res.data.message, "success", 10000));
-     //dispatch(loadUser());
-   } catch (err) {
-     const errors = err.response.data.error;
-     console.log(err.response.data.error);
-     if (errors) {
+  try {
+    const res = await axios.put("/api/users/resetpassword", { newPassword: password1, resetPasswordLink: token }, config);
+
+    dispatch({ type: PASSWORD_UPDATED, payload: res.data });
+
+    dispatch(setAlert(res.data.message, "success", 10000));
+    //dispatch(loadUser());
+  } catch (err) {
+    const errors = err.response.data.error;
+    console.log(err.response.data.error);
+    if (errors) {
       // errors.forEach(error => dispatch(setAlert(error.message, "danger")));
-       dispatch(setAlert(errors, "danger"));
-     }
- 
-     dispatch({
-       type: PASSWORD_NOT_SET
-     });
-   }
- }
+      dispatch(setAlert(errors, "danger"));
+    }
+
+    dispatch({ type: PASSWORD_NOT_SET });
+  }
+}

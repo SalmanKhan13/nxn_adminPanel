@@ -1,13 +1,13 @@
 const AccessControl = require("accesscontrol");
 const ac = new AccessControl();
 
-exports.roles = (function() {
+exports.roles = (function () {
   ac.grant("basic")
     //.readOwn("products")
     .readAny("products")
-    // .deleteOwn('products')
-    // .readAny('products')
-    // .updateOwn("products")
+  // .deleteOwn('products')
+  // .readAny('products')
+  // .updateOwn("products")
 
   // ac.grant("teamlead")
   //   .extend("basic")

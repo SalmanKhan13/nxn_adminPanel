@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-  name:{
+  name: {
     type: String
   },
   email: {
@@ -20,8 +20,8 @@ const UserSchema = new Schema({
     data: String,
     default: ''
   }
- 
 });
+// const Users = mongoose.model("Administrator", UserSchema);
 const Users = mongoose.model("adminusers", UserSchema);
 module.exports = Users;
 
@@ -71,7 +71,7 @@ module.exports = Users;
 //       },
 //       action: {
 //         type: Array
-       
+
 //       },
 //       attributes: {
 //         type: String

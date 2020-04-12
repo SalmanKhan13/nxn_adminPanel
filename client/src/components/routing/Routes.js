@@ -21,7 +21,7 @@ const Routes = (props) => {
         <Route exact path='/reset' component={ResetPassword} />
         <Route exact path='/reset/:token' component={Reset} />
         <PrivateRoute exact path='/dashboard' component={Dashboard} />
-      
+
         <Route component={NotFound} />
       </Switch>
     </section>

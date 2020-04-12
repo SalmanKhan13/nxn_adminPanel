@@ -1,5 +1,5 @@
 import React from "react";
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 export const Landing = () => {
   return (
     <div>
@@ -9,7 +9,7 @@ export const Landing = () => {
             <h1 className="x-large">SeeBiz AdminPanel</h1>
             <p className="lead">
               AdminPanel for First Social Network for B2B, share posts and get help
-              from other 
+              from other
             </p>
             <div className="buttons">
               <Link to="register" className="btn btn-primary">

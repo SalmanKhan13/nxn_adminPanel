@@ -1,15 +1,14 @@
-const {
-    check
-} = require('express-validator');
+const { check } = require('express-validator');
+
 exports.validSign = [
     check('name', 'Name is required').notEmpty()
-    .isLength({
-        min: 4,
-        max: 32
-    }).withMessage('name must be between 3 to 32 characters'),
+        .isLength({
+            min: 4,
+            max: 32
+        }).withMessage('name must be between 3 to 32 characters'),
     check('email')
-    .isEmail()
-    .withMessage('Must be a valid email address'),
+        .isEmail()
+        .withMessage('Must be a valid email address'),
     check('password', 'password is required').notEmpty(),
     check('password').isLength({
         min: 6
@@ -18,8 +17,8 @@ exports.validSign = [
 
 exports.validLogin = [
     check('email')
-    .isEmail()
-    .withMessage('Must be a valid email address'),
+        .isEmail()
+        .withMessage('Must be a valid email address'),
     check('password', 'password is required').notEmpty(),
     check('password').isLength({
         min: 6
@@ -28,7 +27,7 @@ exports.validLogin = [
 
 
 exports.forgotPasswordValidator = [
-    check('email','Email is required')
+    check('email', 'Email is required')
         .not()
         .isEmpty()
         .isEmail()
@@ -36,7 +35,7 @@ exports.forgotPasswordValidator = [
 ];
 
 exports.resetPasswordValidator = [
-    check('newPassword',' Password field is required ')
+    check('newPassword', ' Password field is required ')
         .not()
         .isEmpty()
         .isLength({ min: 6 })

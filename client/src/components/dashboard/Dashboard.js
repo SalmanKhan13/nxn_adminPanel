@@ -16,7 +16,7 @@ const Dashboard = props => {
     csvFile: null
   });
   const [catalogsList, setCatalogsList] = useState([]);
-  
+
   const [uploadPercentage, setUploadPercentage] = useState(0);
 
   // console.log('catalogs, setCatalogs: ', catalogsList, setCatalogsList);
@@ -71,7 +71,7 @@ const Dashboard = props => {
     setUploadFormData({
       ...uploadFormData,
       [e.target.name]: e.currentTarget.files[0]
-     
+
     });
   };
 
@@ -83,10 +83,10 @@ const Dashboard = props => {
     formData.append("user_email", uploadFormData.user_email);
     formData.append("catalog", uploadFormData.catalog);
     formData.append("csvFile", uploadFormData.csvFile);
-    
+
     upload(formData);
 
-  
+
   };
 
   return (
@@ -137,9 +137,9 @@ const Dashboard = props => {
             options={catalogsList}
             onChange={onCatalogChange}
           />
-        
+
         </div>
-        
+
 
         <div className="form-group">
           <input type="file" placeholder="Choose File" name="csvFile" id="csvfile" onChange={onFileChange} />
@@ -171,8 +171,4 @@ const mapStateToProps = state => ({
   user: state.auth.user
 });
 
-export default connect(mapStateToProps, {
-  upload,
-  searchUsers,
-  searchCatalogs
-})(Dashboard);
+export default connect(mapStateToProps, { upload, searchUsers, searchCatalogs })(Dashboard);

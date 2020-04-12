@@ -15,7 +15,7 @@ var supportMailAddress = Config[environment].supportAddress;
 // var ses = new AWS.SES(Auth);
 
 const sendMailWithAttachments = (from, to, subject, body, attachments, next) => {
-  const transporter =  nodemailer.createTransport({
+  const transporter = nodemailer.createTransport({
     service: "gmail",
     secure: "false",
     auth: {
@@ -47,13 +47,13 @@ const sendMailWithAttachments = (from, to, subject, body, attachments, next) => 
   // }
 
   // const options = {from, to, subject, html: body};
-    
-  if ( attachments ) {
+
+  if (attachments) {
     options.attachments = attachments;
   }
-  
+
   // send mail with defined transport object
-  transporter.sendMail(options, function(error, body){
+  transporter.sendMail(options, function (error, body) {
     if (error) {
       console.log(error);
     } else {
