@@ -29,11 +29,12 @@ export default function (state = initialState, action) {
       return { ...state, isAuthenticated: true, user: payload };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
+    
       localStorage.setItem("token", payload.token);
       return { ...state, ...payload, isAuthenticated: true };
     case UPLOAD_SUCCESSFUL:
       return state; // should be a local state...
-    case REGISTER_FAIL:
+   
     case AUTH_ERROR:
     case LOGOUT:
     case LOGIN_FAIL:
@@ -45,6 +46,7 @@ export default function (state = initialState, action) {
     case VERIFICATION_LINK_SEND:
     case PASSWORD_UPDATED:
     case PASSWORD_NOT_SET:
+      case REGISTER_FAIL:
       return state; // should be a local state...
     default:
       return state;

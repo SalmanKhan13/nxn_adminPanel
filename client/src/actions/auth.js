@@ -1,6 +1,6 @@
 import axios from "axios";
 import { setAlert } from "./alert";
-import Progress from "../components/dashboard/Progress";
+
 import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
@@ -26,9 +26,6 @@ export const loadUser = () => async dispatch => {
 
   try {
     const res = await axios.get("/api/auth");
-
-    console.log("load user api called", res);
-
     dispatch({ type: USER_LOADED, payload: res.data });
   } catch (err) {
     dispatch({ type: AUTH_ERROR });
@@ -36,14 +33,14 @@ export const loadUser = () => async dispatch => {
 };
 
 // Register User
-export const register = ({ name, email, password }) => async dispatch => {
+export const register = ({ name, email, password,role }) => async dispatch => {
   const config = {
     headers: {
       "Content-Type": "application/json"
     }
   };
 
-  const body = JSON.stringify({ name, email, password });
+  const body = JSON.stringify({ name, email, password,role });
 
   try {
     const res = await axios.post("/api/users", body, config);
@@ -52,10 +49,16 @@ export const register = ({ name, email, password }) => async dispatch => {
       type: REGISTER_SUCCESS,
       payload: res.data
     });
-
-    dispatch(loadUser());
+    dispatch(setAlert("You have Successfully created a User ", 'success', 10000));
+   // dispatch(loadUser());
   } catch (err) {
     const errors = err.response.data.errors;
+    const error = err.response.data.error;
+    if (error) {
+     
+      dispatch(setAlert(error, "danger"));
+    }
+
 
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
@@ -109,21 +112,17 @@ export const upload = body => async dispatch => {
   console.log("final body ready to send to server", body);
 
   try {
-    const res = await axios.post("api/auth/import", body);//, {
-    //   onUploadProgress: progressEvent => {
-    //     dispatch( Progress( parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total)))
-    //     );
-    //    // Clear percentage
-    //     setTimeout(() => Progress(0), 10000);
-    //   }
-
-    // });
-    // console.log("onUploadProgress"+onUploadProgress+"progressEvent"+ progressEvent)
+    const res = await axios.post("api/auth/upload", body);
 
     dispatch({ type: UPLOAD_SUCCESSFUL });
     dispatch(setAlert(res.data.message, res.data.status, 10000));
   } catch (err) {
     const errors = err.response.data.errors;
+    const error = err.response.data.error;
+    if (error) {
+     
+      dispatch(setAlert(error, "danger"));
+    }
 
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, "danger")));
@@ -160,6 +159,7 @@ export const searchCatalogs = (userId, callback) => async dispatch => {
     callback(res.data.catalogs);
   } catch (err) {
     const errors = err.response.data.errors;
+   
 
     if (errors) {
       errors.forEach(error => dispatch(setAlert(error.msg, "danger")));

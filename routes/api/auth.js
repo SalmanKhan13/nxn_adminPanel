@@ -5,6 +5,7 @@ const auth = require('../../middleware/auth');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
+const controllers = require('../../controllers/userController');
 
 const Users = require('../../models/Users');
 const productController = require('../../controllers/products.controller');
@@ -26,15 +27,18 @@ const productsUploadRules = [
 // @route    POST api/auth/
 // @desc     Upload Product
 // @access   Public
-router.post('/import', auth, upload.fileUpload, productsUploadRules, productController.upload);
-
+router.post('/upload', auth, controllers.grantAccess('updateAny', 'product_upload'), upload.fileUpload, productsUploadRules, productController.upload);
+// @route testing purpose
+router.get('/test',auth,controllers.grantAccess('readAny','product_upload'), controllers.test);
 
 // @route    GET api/auth
 // @desc     Test route
 // @access   Public
 router.get('/', auth, async (req, res) => {
   try {
-    const user = await Users.findById(req.user.id).select('-password');
+    const users=res.locals.loggedInUser;
+  
+    const user = await Users.findById(users.id).select('-password');
     res.json(user);
   } catch (err) {
     console.error(err.message);
@@ -68,7 +72,6 @@ router.post(
           .status(400)
           .json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
-
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
@@ -78,17 +81,24 @@ router.post(
       }
 
       const payload = {
-        user: {
-          id: user.id
-        }
+        // user: {
+        //   userId: user.id
+        // }
+        userId:user._id
       };
 
-      jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 }, (err, token) => {
-        if (err) throw err;
-        res.json({ token });
+      const token= jwt.sign(payload, config.get('jwtSecret'), { expiresIn: 360000 }); 
+      
+        await Users.findByIdAndUpdate(user._id, {
+          token
+        });
+       
+        
+        res.json({ userId:user._id,name: user.name, email: user.email, role: user.role ,token:token
+       });
       }
-      );
-    } catch (err) {
+      
+    catch (err) {
       console.error(err.message);
       res.status(500).send('Server error');
     }

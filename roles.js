@@ -2,23 +2,23 @@ const AccessControl = require("accesscontrol");
 const ac = new AccessControl();
 
 exports.roles = (function () {
-  ac.grant("basic")
-    //.readOwn("products")
-    .readAny("products")
-  // .deleteOwn('products')
-  // .readAny('products')
-  // .updateOwn("products")
+  ac.grant("basic_user")
+    .readOwn("product_upload")
+  .updateOwn("product_upload")
 
-  // ac.grant("teamlead")
-  //   .extend("basic")
-  //   .updateOwn("products")
+  ac.grant("teamlead")
+    .extend("basic_user")
+    .readAny("product_upload")
+    .updateOwn("product_upload")
+    .deleteOwn('product_upload')
 
-  // ac.grant("admin")
-  //   .extend("basic")
-  //   .extend("teamlead")
-  //   .grant("teamlead")
-  //   .updateAny("products")
-  //   .deleteAny("products")
+  ac.grant("admin")
+    .extend("basic_user")
+    .extend("teamlead")
+    .grant("teamlead")
+    .createAny("create_user")
+    .updateAny("product_upload")
+    .deleteAny("product_upload")
 
   return ac;
 })();

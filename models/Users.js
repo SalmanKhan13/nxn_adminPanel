@@ -14,14 +14,22 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
-  resetToken: String,
+  
   resetTokenExpiration: Date,
   resetPasswordLink: {
     data: String,
     default: ''
+  },
+  role: {
+    type: String,
+    default: 'basic_user',
+    enum: ["basic_user", "teamlead", "admin"]
+  },
+  token: {
+    type: String
   }
+
 });
-// const Users = mongoose.model("Administrator", UserSchema);
 const Users = mongoose.model("adminusers", UserSchema);
 module.exports = Users;
 
@@ -82,11 +90,3 @@ module.exports = Users;
 //     }
 //   ]
 // });
-
-// // role: {
-// //   type: String,
-// //   default: 'basic',
-// //   enum: ["basic", "teamlead", "admin"]
-// // },
-// const Users = mongoose.model("users", UserSchema);
-// module.exports = Users;
