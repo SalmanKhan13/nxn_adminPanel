@@ -16,24 +16,24 @@ const upload = multer({
         fileSize: 10 * 1024 * 1024 //Maximum file size is 10MB
     },
     fileFilter: (req, file, cb) => {
-        if ( file.mimetype == "text/csv" || file.mimetype == "application/vnd.ms-excel" || file.originalname.match(/\.(csv)$/i) ) {
+        if (file.mimetype == "text/csv" || file.mimetype == "application/vnd.ms-excel" || file.originalname.match(/\.(csv)$/i)) {
             cb(null, true);
         } else {
-            cb({message: 'Only Csv file format allowed!', fileName: file.originalname, field: file.fieldname}, false);
+            cb({ message: 'Only Csv file format allowed!', fileName: file.originalname, field: file.fieldname }, false);
         }
     }
 })
-.single('csvFile');
+    .single('csvFile');
 
 /*
  |--------------------------------------------------------------------------
  | Middleware Products FileUpload
  |--------------------------------------------------------------------------
  */
-exports.fileUpload = function(req, res, next) {
+exports.fileUpload = function (req, res, next) {
     upload(req, res, err => {
         // if ( err instanceof multer.MulterError ) { }
-        if ( err ) {
+        if (err) {
             req.fileError = { value: '', msg: err.message, param: err.field, location: 'body' };
         }
         next();

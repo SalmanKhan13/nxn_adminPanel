@@ -554,7 +554,7 @@ var UserSchema = new Schema({
       }
     }
   ],
-  metaTags:{
+  metaTags: {
     title: {
       type: String,
       default: null

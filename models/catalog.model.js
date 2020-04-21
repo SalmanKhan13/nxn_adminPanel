@@ -48,6 +48,6 @@ var CatalogSchema = new Schema({
     type: Date,
     default: Date.now
   },
-}, {usePushEach: true});
+}, { usePushEach: true });
 var Model = mongoose.model('Catalog', CatalogSchema);
 module.exports = Model;

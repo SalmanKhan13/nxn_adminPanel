@@ -1,85 +1,169 @@
-import React,{Fragment,useState} from 'react';
-import {Link, Redirect} from 'react-router-dom';
-import { connect } from 'react-redux';
-import { setAlert } from '../../actions/alert';
-import { register } from '../../actions/auth';
-import PropTypes from 'prop-types';
+import React, { Fragment, useState } from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { setAlert } from "../../actions/alert";
+import { register } from "../../actions/auth";
+import PropTypes from "prop-types";
 
 const Register = ({ setAlert, register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    password2: ''
+    name: "",
+    email: "",
+    password: "",
+    password2: "",
+    role: "",
   });
 
-  const { name, email, password, password2 } = formData;
+  const { name, email, password, password2, role } = formData;
 
-  const onChange = e =>
+  const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (password !== password2) {
-      setAlert('Passwords do not match', 'danger');
+      setAlert("Passwords do not match", "danger");
     } else {
-      register({ name, email, password });
-     //console.log("Success");
+      register({ name, email, password, role });
+      //console.log("Success");
     }
   };
 
-  if (isAuthenticated) {
-    return <Redirect to='/dashboard' />;
-  }
+  // if (isAuthenticated) {
+  //   return <Redirect to='/dashboard' />;
+  // }
 
   return (
     <Fragment>
-      <h1 className='large text-primary'>Sign Up</h1>
-      <p className='lead'>
-        <i className='fas fa-user' /> Create User Account
-      </p>
-      <form className='form' onSubmit={e => onSubmit(e)}>
-        <div className='form-group'>
-          <input
-            type='text'
-            placeholder='Name'
-            name='name'
-            value={name}
-            onChange={e => onChange(e)}
-          />
+      <div className="content">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-md-8">
+              <div className="card">
+                <div className="card-header card-header-primary">
+                  <h4 className="card-title"> Create User Account</h4>
+                  <p className="card-category">Only Admin can create</p>
+                </div>
+                <div className="card-body">                   
+                    <form className="form" onSubmit={(e) => onSubmit(e)}>
+
+                    <div className="row">
+                      <div className="col-md">
+                        <div className="form-group">
+                          <label className="bmd-label-floating">
+                            Enter Name
+                          </label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="name"
+                            value={name}
+                            onChange={(e) => onChange(e)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-md">
+                        <div className="form-group">
+                          <label className="bmd-label-floating">
+                            Email address
+                          </label>
+                          <input
+                            type="email"
+                            className="form-control"
+                            name="email"
+                            value={email}
+                            onChange={(e) => onChange(e)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="row">
+                      <div className="col-md">
+                        <div className="form-group">
+                          <label className="bmd-label-floating">Password</label>
+                          <input
+                            type="password"
+                            className="form-control"
+                            name="password"
+                            value={password}
+                            onChange={(e) => onChange(e)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-md">
+                        <div className="form-group">
+                          <label className="bmd-label-floating">Confirm Password</label>
+                          <input
+                            type="password"
+                            className="form-control"
+                            name="password2"
+                            value={password2}
+                            onChange={(e) => onChange(e)}
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="row">
+                      <div className="col-md">
+                        <div className="form-group">
+                          <label className="bmd-label-floating">* Select User Role</label>
+                          <select className="form-control"
+                          name="role"
+                          value={role}
+                          onChange={(e) => onChange(e)}
+                        >
+                          <option value="0">* Select User Role</option>
+                          <option value="basic_user">Basic User</option>
+                          <option value="teamlead">TeamLead</option>
+                          <option value="admin">Admin</option>
+                        </select>
+                        <small className="form-text">
+                          Give you an idea of what a user can perform
+                        </small>
+                        </div>
+                      </div>
+                    </div>                                                      
+                      <input
+                        type="submit"
+                        className="btn btn-primary"
+                        value="Create User"
+                      />                 
+                    <hr />
+                    <div className="clearfix"></div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-4">
+              <div className="card card-profile">
+                <div className="card-avatar">
+                  <Link to="javascript:;">
+                    <img className="img" src="../assets/img/faces/marc.jpg" />
+                  </Link>
+                </div>
+                <div className="card-body">
+                  <h6 className="card-category text-gray">CEO / Co-Founder</h6>
+                  <h4 className="card-title">Mubashar Ehsan</h4>
+                  <p className="card-description">
+                    Don't be scared of the truth because we need to restart the
+                    human foundation in truth And I love you like Kanye loves
+                    Kanye I love Rick Owens’ bed design but the back is...
+                  </p>
+                  <Link to="javascript:;" className="btn btn-primary btn-round">
+                    Follow
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className='form-group'>
-          <input
-            type='email'
-            placeholder='Email Address'
-            name='email'
-            value={email}
-            onChange={e => onChange(e)}
-          />
-        </div>
-        <div className='form-group'>
-          <input
-            type='password'
-            placeholder='Password'
-            name='password'
-            value={password}
-            onChange={e => onChange(e)}
-          />
-        </div>
-        <div className='form-group'>
-          <input
-            type='password'
-            placeholder='Confirm Password'
-            name='password2'
-            value={password2}
-            onChange={e => onChange(e)}
-          />
-        </div>
-        <input type='submit' className='btn btn-primary' value='Register' />
-      </form>
-      <p className='my-1'>
-        Already have an account? <Link to='/login'>Sign In</Link>
-      </p>
+      </div>
     </Fragment>
   );
 };
@@ -87,14 +171,14 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool
+  isAuthenticated: PropTypes.bool,
 };
 
-const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
-});
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+  };
+};
 
-export default connect(
-  mapStateToProps,
-  { setAlert,register }
-)(Register);
+export default connect(mapStateToProps, { setAlert, register })(Register);
+

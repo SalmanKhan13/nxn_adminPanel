@@ -209,13 +209,13 @@ function synchronize() {
   });
   var count = 0;
 
-  stream.on('data', function(err, doc) {
+  stream.on('data', function (err, doc) {
     count++;
   });
-  stream.on('close', function() {
+  stream.on('close', function () {
     console.log('indexed ' + count + ' documents!');
   });
-  stream.on('error', function(err) {
+  stream.on('error', function (err) {
     console.log(err);
   });
 }

@@ -13,7 +13,7 @@ var Auth = {
 var s3 = new AWS.S3(Auth);
 
 // Creating bucket function
-exports.bucketCreate = function(bucket_name, permission, location, next) {
+exports.bucketCreate = function (bucket_name, permission, location, next) {
   var params = {
     Bucket: bucket_name,
     /* required */
@@ -22,23 +22,23 @@ exports.bucketCreate = function(bucket_name, permission, location, next) {
       LocationConstraint: location // 'EU | eu-west-1 | us-west-1 | us-west-2 | ap-southeast-1 | ap-southeast-2 | ap-northeast-1 | sa-east-1 | cn-north-1 | eu-central-1'
     }
   };
-  s3.createBucket(params, function(err, data) {
+  s3.createBucket(params, function (err, data) {
     next(err, data);
   });
 };
 // Deleting bucket function
-exports.bucketDel = function(bucket_name, next) {
+exports.bucketDel = function (bucket_name, next) {
   s3.deleteBucket(
     {
       Bucket: bucket_name
     },
-    function(err, data) {
+    function (err, data) {
       next(err, data);
     }
   );
 };
 // uploading file or object into bucket
-exports.upFile = function(key, file, type, next) {
+exports.upFile = function (key, file, type, next) {
   var params = {
     Bucket: BucketName,
     Key: key,
@@ -46,12 +46,12 @@ exports.upFile = function(key, file, type, next) {
     Body: file,
     ACL: 'public-read'
   };
-  s3.upload(params, function(err, data) {
+  s3.upload(params, function (err, data) {
     next(err, data);
   });
 };
 //put the buffetr object
-exports.putObj = function(key, file, type, next) {
+exports.putObj = function (key, file, type, next) {
   var params = {
     Bucket: BucketName,
     Key: key,
@@ -59,12 +59,12 @@ exports.putObj = function(key, file, type, next) {
     Body: file,
     ACL: 'public-read'
   };
-  s3.putObject(params, function(err, data) {
+  s3.putObject(params, function (err, data) {
     next(err, data);
   });
 };
 // Deleting file / object from bucket
-exports.delFile = function(key, next) {
+exports.delFile = function (key, next) {
   var params = {
     Bucket: BucketName,
     /* required */
@@ -74,12 +74,12 @@ exports.delFile = function(key, next) {
     // RequestPayer: 'requester',
     // VersionId: 'STRING_VALUE'
   };
-  s3.deleteObject(params, function(err, data) {
+  s3.deleteObject(params, function (err, data) {
     next(err, data);
   });
 };
 
-exports.delMultipleFile = function(objects, next) {
+exports.delMultipleFile = function (objects, next) {
   var params = {
     Bucket: BucketName,
     /* required */
@@ -91,13 +91,13 @@ exports.delMultipleFile = function(objects, next) {
     // RequestPayer: 'requester',
     // VersionId: 'STRING_VALUE'
   };
-  s3.deleteObjects(params, function(err, data) {
+  s3.deleteObjects(params, function (err, data) {
     next(err, data);
   });
 };
 
 // copying file or object from one bucket into another
-exports.copyFile = function(sourceKey, destinationKey, next) {
+exports.copyFile = function (sourceKey, destinationKey, next) {
   var finalSourceKey = IMSBuckterName + sourceKey;
   var params = {
     Bucket: BucketName,
@@ -105,7 +105,7 @@ exports.copyFile = function(sourceKey, destinationKey, next) {
     Key: destinationKey,
     ACL: 'public-read'
   };
-  s3.copyObject(params, function(err, data) {
+  s3.copyObject(params, function (err, data) {
     next(err, data);
   });
 };

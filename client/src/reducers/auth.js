@@ -7,7 +7,11 @@ import {
   LOGOUT,
   LOGIN_SUCCESS,
   UPLOAD_SUCCESSFUL,
-  UPLOAD_FAIL
+  UPLOAD_FAIL,
+  VERIFICATION_LINK_SEND,
+  VERIFICATION_LINK_NOT_SEND,
+  PASSWORD_UPDATED,
+  PASSWORD_NOT_SET
 } from "../actions/types";
 
 const initialState = {
@@ -16,20 +20,21 @@ const initialState = {
   user: JSON.parse(localStorage.getItem("user"))
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
     case USER_LOADED:
-      localStorage.setItem("user", JSON.stringify(payload));  
-    return { ...state, isAuthenticated: true, user: payload };
+      localStorage.setItem("user", JSON.stringify(payload));
+      return { ...state, isAuthenticated: true, user: payload };
     case REGISTER_SUCCESS:
     case LOGIN_SUCCESS:
+    
       localStorage.setItem("token", payload.token);
-      return {...state, ...payload, isAuthenticated: true };
+      return { ...state, ...payload, isAuthenticated: true };
     case UPLOAD_SUCCESSFUL:
       return state; // should be a local state...
-    case REGISTER_FAIL:
+   
     case AUTH_ERROR:
     case LOGOUT:
     case LOGIN_FAIL:
@@ -37,6 +42,11 @@ export default function(state = initialState, action) {
       localStorage.removeItem("user");
       return { ...state, token: null, isAuthenticated: false, user: null };
     case UPLOAD_FAIL:
+    case VERIFICATION_LINK_NOT_SEND:
+    case VERIFICATION_LINK_SEND:
+    case PASSWORD_UPDATED:
+    case PASSWORD_NOT_SET:
+      case REGISTER_FAIL:
       return state; // should be a local state...
     default:
       return state;
