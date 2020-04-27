@@ -130,12 +130,27 @@ var ProductSchema = new Schema(
           es_indexed: true,
           es_type: 'text'
         },
-        size80: {
+        size500: {
           type: String,
           es_type: 'text',
           es_indexed: true
         },
         size480: {
+          type: String,
+          es_type: 'text',
+          es_indexed: true
+        },
+        size250: {
+          type: String,
+          es_type: 'text',
+          es_indexed: true
+        },
+        size100: {
+          type: String,
+          es_type: 'text',
+          es_indexed: true
+        },
+        size80: {
           type: String,
           es_type: 'text',
           es_indexed: true

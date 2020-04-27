@@ -150,9 +150,10 @@ const UploadScript = (props) => {
                     </div>
 
                     <div className="form-group">
-                     
+
                       <input
                         type="file"
+                        accept=".xlsx, .xls, .csv"
                         placeholder="Choose File"
                         name="csvFile"
                         id="csvfile"
@@ -161,11 +162,11 @@ const UploadScript = (props) => {
                     </div>
                     <div>
                       <input
-                        accept="image/*"
+                        accept=".xlsx, .xls, .csv"
                         placeholder="Choose File"
                         name="csvFile"
                         id="csvfile"
-                        
+
                         multiple
                         type="file"
                         onChange={onFileChange}
