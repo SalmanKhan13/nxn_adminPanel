@@ -11,13 +11,17 @@ import {
   VERIFICATION_LINK_SEND,
   VERIFICATION_LINK_NOT_SEND,
   PASSWORD_UPDATED,
-  PASSWORD_NOT_SET
+  PASSWORD_NOT_SET,
+  LOAD_ALLUSERS,
+  LOAD_ALLUSERS_ERROR
+
 } from "../actions/types";
 
 const initialState = {
   token: localStorage.getItem("token"),
   isAuthenticated: localStorage.getItem("token") ? true : false,
-  user: JSON.parse(localStorage.getItem("user"))
+  user: JSON.parse(localStorage.getItem("user")),
+  users: null,
 };
 
 export default function (state = initialState, action) {
@@ -31,10 +35,12 @@ export default function (state = initialState, action) {
     case LOGIN_SUCCESS:
     
       localStorage.setItem("token", payload.token);
-      return { ...state, ...payload, isAuthenticated: true };
+      return { ...state, ...payload, isAuthenticated: true, user : payload };
     case UPLOAD_SUCCESSFUL:
       return state; // should be a local state...
-   
+    case LOAD_ALLUSERS:
+      localStorage.setItem("token", payload.token);
+      return {...state, ...payload, isAuthenticated: true, users: payload};
     case AUTH_ERROR:
     case LOGOUT:
     case LOGIN_FAIL:
@@ -46,9 +52,55 @@ export default function (state = initialState, action) {
     case VERIFICATION_LINK_SEND:
     case PASSWORD_UPDATED:
     case PASSWORD_NOT_SET:
-      case REGISTER_FAIL:
+    case REGISTER_FAIL:
+    case LOAD_ALLUSERS_ERROR:
       return state; // should be a local state...
     default:
       return state;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+// export default function (state = initialState, action) {
+//   const { type, payload } = action;
+
+//   switch (type) {
+//     case USER_LOADED:
+//       localStorage.setItem("user", JSON.stringify(payload));
+//       return { ...state, isAuthenticated: true, user: payload };
+//     case REGISTER_SUCCESS:
+//     case LOGIN_SUCCESS:
+    
+//       localStorage.setItem("token", payload.token);
+//       return { ...state, ...payload, isAuthenticated: true, user : payload };
+//     case UPLOAD_SUCCESSFUL:
+//       return state; // should be a local state...
+//     case LOAD_ALLUSERS:
+//       return {...state, ...payload, isAuthenticated: true, users: payload};
+//     case AUTH_ERROR:
+//     case LOGOUT:
+//     case LOGIN_FAIL:
+//       localStorage.removeItem("token");
+//       localStorage.removeItem("user");
+//       return { ...state, token: null, isAuthenticated: false, user: null };
+//     case UPLOAD_FAIL:
+//     case VERIFICATION_LINK_NOT_SEND:
+//     case VERIFICATION_LINK_SEND:
+//     case PASSWORD_UPDATED:
+//     case PASSWORD_NOT_SET:
+//     case REGISTER_FAIL:
+//     case LOAD_ALLUSERS_ERROR:
+//       return state; // should be a local state...
+//     default:
+//       return state;
+//   }
+// }

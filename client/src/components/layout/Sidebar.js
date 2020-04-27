@@ -1,75 +1,141 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-
+import React from "react";
+import { NavLink, Link } from "react-router-dom";
 
 const Sidebar = () => {
-    return (
-       
-         <div className="sidebar" data-color="purple" data-background-color="white" data-image="assets/img/sidebar-1.jpg">
-     
-      <div className="logo"><Link to="/" className="simple-text logo-normal">
-          SeeBiz Team 
-        </Link></div>
+  return (
+    <div
+      className="sidebar"
+      data-color="purple"
+      data-background-color="white"
+      data-image="assets/img/sidebar-1.jpg"
+    >
+      <div className="logo">
+        <Link to="/" className="simple-text logo-normal">
+          SeeBiz Team
+        </Link>
+      </div>
       <div className="sidebar-wrapper">
         <ul className="nav">
-          <li className="nav-item active  ">
-            <Link className="nav-link" to="./dashboard">
+          <li className="nav-item  ">
+            <NavLink
+              className="nav-link"
+              activeStyle={{
+                 backgroundColor: "rgb(156, 39, 176)",
+                color: "white"
+              }}
+              to="./dashboard"
+            >
               <i className="material-icons">dashboard</i>
               <p>Dashboard</p>
-            </Link>
+            </NavLink>
           </li>
           <li className="nav-item ">
-            <Link className="nav-link" to="./user">
+            <NavLink
+              className="nav-link"
+              activeStyle={{
+                backgroundColor: "rgb(156, 39, 176)",
+                color: "white",
+              }}
+              to="./user"
+            >
               <i className="material-icons">person</i>
               <p>User Profile</p>
-            </Link>
+            </NavLink>
           </li>
           <li className="nav-item ">
-            <Link className="nav-link" to="./tables">
+            <NavLink
+              className="nav-link"
+              activeStyle={{
+                 backgroundColor: "rgb(156, 39, 176)",
+                color: "white",
+              }}
+              to="./tables"
+            >
               <i className="material-icons">content_paste</i>
               <p>Table List</p>
-            </Link>
+            </NavLink>
           </li>
           <li className="nav-item ">
-            <Link className="nav-link" to="./typography.html">
+            <NavLink
+              className="nav-link"
+              activeStyle={{
+                 backgroundColor: "rgb(156, 39, 176)",
+                color: "white",
+              }}
+              to="./typography"
+            >
               <i className="material-icons">library_books</i>
               <p>Typography</p>
-            </Link>
+            </NavLink>
           </li>
           <li className="nav-item ">
-            <Link className="nav-link" to="./icons.html">
+            <NavLink
+              className="nav-link"
+              activeStyle={{
+                 backgroundColor: "rgb(156, 39, 176)",
+                color: "white",
+              }}
+              to="./icons"
+            >
               <i className="material-icons">bubble_chart</i>
               <p>Icons</p>
-            </Link>
+            </NavLink>
           </li>
           <li className="nav-item ">
-            <Link className="nav-link" to="./map.html">
+            <NavLink
+              className="nav-link"
+              activeStyle={{
+                 backgroundColor: "rgb(156, 39, 176)",
+                color: "white"
+              }}
+              to="./map"
+            >
               <i className="material-icons">location_ons</i>
               <p>Maps</p>
-            </Link>
+            </NavLink>
           </li>
           <li className="nav-item ">
-            <Link className="nav-link" to="./notifications.html">
+            <NavLink
+              className="nav-link"
+              activeStyle={{
+                 backgroundColor: "rgb(156, 39, 176)",
+                color: "white"
+              }}
+              to="./notifications"
+            >
               <i className="material-icons">notifications</i>
               <p>Notifications</p>
-            </Link>
+            </NavLink>
           </li>
           <li className="nav-item ">
-            <Link className="nav-link" to="./rtl.html">
+            <NavLink
+              className="nav-link"
+              activeStyle={{
+                 backgroundColor: "rgb(156, 39, 176)",
+                color: "white"
+              }}
+              to="./rtl"
+            >
               <i className="material-icons">language</i>
               <p>RTL Support</p>
-            </Link>
+            </NavLink>
           </li>
           <li className="nav-item active-pro ">
-            <Link className="nav-link" to="./upgrade.html">
+            <NavLink
+              className="nav-link"
+              activeStyle={{
+                 backgroundColor: "rgb(156, 39, 176)",
+                color: "white"
+              }}
+              to="./upgrade"
+            >
               <i className="material-icons">unarchive</i>
               <p>Upgrade to PRO</p>
-            </Link>
+            </NavLink>
           </li>
         </ul>
       </div>
     </div>
-     
-    )
-}
+  );
+};
 export default Sidebar;

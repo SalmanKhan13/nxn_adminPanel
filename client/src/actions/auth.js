@@ -14,7 +14,9 @@ import {
   VERIFICATION_LINK_SEND,
   VERIFICATION_LINK_NOT_SEND,
   PASSWORD_UPDATED,
-  PASSWORD_NOT_SET
+  PASSWORD_NOT_SET,
+  LOAD_ALLUSERS,
+  LOAD_ALLUSERS_ERROR
 } from "./types";
 import setAuthToken from "../utils/setAuthToken";
 
@@ -25,12 +27,26 @@ export const loadUser = () => async dispatch => {
   }
 
   try {
-    const res = await axios.get("/api/auth");
+    const res = await axios.get("/api/users/auth");
     dispatch({ type: USER_LOADED, payload: res.data });
   } catch (err) {
     dispatch({ type: AUTH_ERROR });
   }
 };
+// Fetch AllUsers
+export const fetchAllUser=() => async dispatch =>{
+
+  try{
+    const res= await axios.get("api/users/allusers");
+    dispatch({
+      type: LOAD_ALLUSERS,
+      payload: res.data })               
+  }
+  catch (err) {
+    dispatch({ type: LOAD_ALLUSERS_ERROR });
+  }
+}
+
 
 // Register User
 export const register = ({ name, email, password,role }) => async dispatch => {
@@ -81,7 +97,7 @@ export const login = (email, password) => async dispatch => {
   const body = JSON.stringify({ email, password });
 
   try {
-    const res = await axios.post("/api/auth", body, config);
+    const res = await axios.post("/api/users/auth", body, config);
 
     dispatch({
       type: LOGIN_SUCCESS,
@@ -89,6 +105,7 @@ export const login = (email, password) => async dispatch => {
     });
 
     dispatch(loadUser());
+    dispatch(fetchAllUser());
   } catch (err) {
     const errors = err.response.data.errors;
 
@@ -112,7 +129,7 @@ export const upload = body => async dispatch => {
   console.log("final body ready to send to server", body);
 
   try {
-    const res = await axios.post("api/auth/upload", body);
+    const res = await axios.post("api/product/upload", body);
 
     dispatch({ type: UPLOAD_SUCCESSFUL });
     dispatch(setAlert(res.data.message, res.data.status, 10000));
@@ -131,7 +148,7 @@ export const upload = body => async dispatch => {
     dispatch({ type: UPLOAD_FAIL });
   }
 };
-
+// search user
 export const searchUsers = (search, callback) => async dispatch => {
   try {
     const res = await axios.get("api/users/search?search=" + search);
@@ -150,6 +167,7 @@ export const searchUsers = (search, callback) => async dispatch => {
   }
 };
 
+// search catalog
 export const searchCatalogs = (userId, callback) => async dispatch => {
   try {
     const res = await axios.get("api/catalogs/search/" + userId);
@@ -169,6 +187,7 @@ export const searchCatalogs = (userId, callback) => async dispatch => {
   }
 };
 
+// forgot password
 export const forgotpassword = (email) => async dispatch => {
   const config = {
     headers: {
@@ -196,6 +215,7 @@ export const forgotpassword = (email) => async dispatch => {
   }
 }
 
+// reset password
 export const resetpassword = (password1, token) => async dispatch => {
   console.log("action hit")
   const config = {

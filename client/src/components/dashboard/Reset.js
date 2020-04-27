@@ -1,31 +1,35 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { resetpassword } from '../../actions/auth';
+import React, { Fragment, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { resetpassword } from "../../actions/auth";
 
 const Reset = ({ match, resetpassword }) => {
-  const [formData, setFormData] = useState({ password1: '', password2: '', token: '' });
+  const [formData, setFormData] = useState({
+    password1: "",
+    password2: "",
+    token: "",
+  });
 
-  const onChange = e =>
+  const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const { password1, password2, token } = formData;
 
   useEffect(() => {
-    let token = match.params.token
+    let token = match.params.token;
     if (token) {
-      setFormData({ ...formData, token })
+      setFormData({ ...formData, token });
     }
-  },[setFormData]);
+  }, [setFormData]);
 
-  const onSubmit = async e => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log('resetcomponent ' + password1, password2, token);
+    console.log("resetcomponent " + password1, password2, token);
     resetpassword(password1, token);
   };
 
   return (
-<Fragment>
+    <Fragment>
       <div className="content">
         <div className="container-fluid">
           <div className="row">
@@ -41,7 +45,7 @@ const Reset = ({ match, resetpassword }) => {
                       <div className="col-md">
                         <div className="form-group">
                           <label className="bmd-label-floating">
-                          Enter Updated Password
+                            Enter Updated Password
                           </label>
                           <input
                             type="password"
@@ -58,7 +62,9 @@ const Reset = ({ match, resetpassword }) => {
                     <div className="row">
                       <div className="col-md">
                         <div className="form-group">
-                          <label className="bmd-label-floating">Confirm Password</label>
+                          <label className="bmd-label-floating">
+                            Confirm Password
+                          </label>
                           <input
                             type="password"
                             className="form-control"
@@ -74,12 +80,12 @@ const Reset = ({ match, resetpassword }) => {
                       className='btn btn-primary  pull-right"'
                       value="Update Password"
                     />
-                    <span ></span>
+                    <span></span>
                     <Link to="/login" className="pull-right">
                       <i className="fas fa-user " />{" "}
                       <span className="hide-sm ">Sign In</span>
                     </Link>
-                    
+
                     <div className="clearfix"></div>
                   </form>
                 </div>
@@ -88,8 +94,8 @@ const Reset = ({ match, resetpassword }) => {
             <div className="col-md-4">
               <div className="card card-profile">
                 <div className="card-avatar">
-                  <Link to="javascript:;">
-                    <img className="img" src="../assets/img/faces/avatar.jpg" />
+                  <Link to="/reset">
+                    <img className="img" alt="reset" src="../assets/img/faces/avatar.jpg" />
                   </Link>
                 </div>
                 <div className="card-body">
@@ -100,7 +106,7 @@ const Reset = ({ match, resetpassword }) => {
                     human foundation in truth And I love you like Kanye loves
                     Kanye I love Rick Owens’ bed design but the back is...
                   </p>
-                  <Link to="javascript:;" className="btn btn-primary btn-round">
+                  <Link to="/reset" className="btn btn-primary btn-round">
                     Follow
                   </Link>
                 </div>
@@ -110,15 +116,11 @@ const Reset = ({ match, resetpassword }) => {
         </div>
       </div>
     </Fragment>
-
-   
-  )
-}
-
-const mapStateToProps = state => {
-  return {
-    isAuthenticated: state.auth.isAuthenticated
-  }
+  );
 };
-
+const mapStateToProps = (state) => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated,
+  };
+};
 export default connect(mapStateToProps, { resetpassword })(Reset);

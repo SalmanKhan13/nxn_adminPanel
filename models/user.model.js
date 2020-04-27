@@ -1,586 +1,589 @@
-var mongoose = require('mongoose');
-var bcrypt = require('bcrypt-nodejs');
-var mongoosastic = require('mongoosastic');
+var mongoose = require("mongoose");
+var bcrypt = require("bcrypt-nodejs");
+var mongoosastic = require("mongoosastic");
 //var elastic = require('../../config/elasticsearch');
 //var BussinessType = require('./bussiness-type.model');
 //var BussinessCategory = require('./bussiness-category.model');
 var Schema = mongoose.Schema;
 
 var SALT_WORK_FACTOR = 10;
-var UserSchema = new Schema({
-  email: {
-    type: String,
-    unique: true,
-    index: true,
-    lowercase: true,
-    es_indexed: false
-  },
-  password: {
-    type: String,
-    es_indexed: false
-  },
-  api_key: {
-    type: String,
-    index: true,
-    unique: true,
-    es_indexed: false
-  }, // Unique API_KEY for user indentifier
-  token_key: {
-    type: String,
-    es_indexed: false
-  }, // Randomly generated token key for api access
-  first_name: {
-    type: String,
-    es_type: 'completion',
-    es_analyzer: 'simple',
-    es_search_analyzer: 'simple'
-  },
-  last_name: {
-    type: String,
-    es_type: 'completion',
-    es_analyzer: 'simple',
-    es_search_analyzer: 'simple'
-  },
-  user_type: {
-    type: String,
-    enum: ['general', 'merchant', 'admin'],
-    default: 'general',
-    es_indexed: false
-  },
-  phone: {
-    home: {
+var UserSchema = new Schema(
+  {
+    email: {
       type: String,
-      es_indexed: false
+      unique: true,
+      index: true,
+      lowercase: true,
+      es_indexed: false,
     },
-    office: {
+    password: {
       type: String,
-      es_indexed: false
+      es_indexed: false,
     },
-    personal: {
+    api_key: {
       type: String,
-      es_indexed: false
-    }
-  },
-  address: {
-    type: {
-      country: {
+      index: true,
+      unique: true,
+      es_indexed: false,
+    }, // Unique API_KEY for user indentifier
+    token_key: {
+      type: String,
+      es_indexed: false,
+    }, // Randomly generated token key for api access
+    first_name: {
+      type: String,
+      es_type: "completion",
+      es_analyzer: "simple",
+      es_search_analyzer: "simple",
+    },
+    last_name: {
+      type: String,
+      es_type: "completion",
+      es_analyzer: "simple",
+      es_search_analyzer: "simple",
+    },
+    user_type: {
+      type: String,
+      enum: ["general", "merchant", "admin"],
+      default: "general",
+      es_indexed: false,
+    },
+    phone: {
+      home: {
         type: String,
-        es_indexed: true,
-        es_type: 'text'
+        es_indexed: false,
       },
-      city: {
+      office: {
         type: String,
-        es_indexed: true,
-        es_type: 'text'
+        es_indexed: false,
       },
-      zip: {
-        type: Number,
-        es_indexed: true,
-        es_type: 'text'
-      },
-      street: {
+      personal: {
         type: String,
-        es_indexed: true,
-        es_type: 'text'
+        es_indexed: false,
       },
-      street2: {
-        type: String,
-        es_indexed: true,
-        es_type: 'text'
-      }
-    }
-  },
-  website: {
-    type: String,
-    es_indexed: false
-  },
-  email_verification: {
-    type: Boolean,
-    default: false,
-    es_indexed: true
-  }, // email verified or not
-  phone_number_verification: {
-    type: Boolean,
-    default: false,
-    es_indexed: false
-  }, // phone number verified or not
-  status: {
-    type: {
-      active: {
-        type: Boolean,
-        default: true
-      },
-      suspended: {
-        type: Boolean,
-        default: false
-      }
     },
-    default: {
-      active: true,
-      suspended: false
-    },
-    es_indexed: false
-  }, // account activated or not or blocked
-  followings: {
-    type: [
-      {
-        userId: String,
-        status: {
-          type: Boolean,
-          default: false
-        },
-        following_date: {
-          type: Date,
-          default: Date.now
-        }
-      }
-    ],
-    es_indexed: false
-  },
-  followers: {
-    type: [
-      {
-        userId: String,
-        status: {
-          type: Boolean,
-          default: false
-        },
-        follower_date: {
-          type: Date,
-          default: Date.now
-        }
-      }
-    ],
-    es_indexed: false
-  },
-  shortlists: {
-    type: [],
-    es_indexed: false
-  }, // shortlists topics or categories
-  social_profile: {
-    type: {
-      facebook: {
-        access_token: String,
-        access_secret: String
-      },
-      twitter: {
-        access_token: String,
-        access_secret: String
-      },
-      linkedin: {
-        access_token: String,
-        access_secret: String
-      },
-      google: {
-        googleId: String
-      }
-    },
-    es_indexed: false
-  },
-  featurePhotoOne: {
-    type: String,
-    es_indexed: false
-  },
-  featurePhotoTwo: {
-    type: String,
-    es_indexed: false
-  },
-  featurePhotoThree: {
-    type: String,
-    es_indexed: false
-  },
-  featurePhotoFour: {
-    type: String,
-    es_indexed: false
-  },
-  featurePhotoFive: {
-    type: String,
-    es_indexed: false
-  },
-
-  optimizedFeaturedImages: {
-    es_indexed: false,
-    one: {
-      thumbnail: String,
-      large: String
-    },
-    two: {
-      thumbnail: String,
-      large: String
-    },
-    three: {
-      thumbnail: String,
-      large: String
-    },
-    four: {
-      thumbnail: String,
-      large: String
-    },
-    five: {
-      thumbnail: String,
-      large: String
-    }
-  },
-
-  business_name: {
-    type: String,
-    es_indexed: true,
-    es_type: 'text',
-    es_fields: {
-      completion: {
-        type: 'completion',
-        analyzer: 'standard',
-        preserve_position_increments: true,
-        preserve_separators: true
-      }
-    }
-  }, // User business Infos business name
-  username: {
-    type: String,
-    unique: true,
-    es_indexed: true,
-    es_type: 'text'
-  }, // Auto generated username(generate one time when user signup)
-  business_info: [
-    {
-      _id: {
-        type: mongoose.Schema.Types.ObjectId,
-        es_indexed: true,
-        es_type: 'text'
-      },
-      businessName: {
-        type: String,
-        es_indexed: true,
-        es_type: 'text'
-      }, // User Business name
-      businessType: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'BussinessType',
-        es_indexed: true,
-        es_type: 'nested'
-      },
-      businessCategory: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'BussinessCategory',
-        es_indexed: true,
-        es_type: 'nested'
-      },
-      businessLocation: {
+    address: {
+      type: {
         country: {
           type: String,
           es_indexed: true,
-          es_type: 'text'
+          es_type: "text",
         },
         city: {
           type: String,
           es_indexed: true,
-          es_type: 'text'
+          es_type: "text",
         },
         zip: {
           type: Number,
           es_indexed: true,
-          es_type: 'text'
+          es_type: "text",
         },
         street: {
           type: String,
           es_indexed: true,
-          es_type: 'text'
+          es_type: "text",
         },
         street2: {
           type: String,
           es_indexed: true,
-          es_type: 'text'
+          es_type: "text",
         },
-        state: {
+      },
+    },
+    website: {
+      type: String,
+      es_indexed: false,
+    },
+    email_verification: {
+      type: Boolean,
+      default: false,
+      es_indexed: true,
+    }, // email verified or not
+    phone_number_verification: {
+      type: Boolean,
+      default: false,
+      es_indexed: false,
+    }, // phone number verified or not
+    status: {
+      type: {
+        active: {
+          type: Boolean,
+          default: true,
+        },
+        suspended: {
+          type: Boolean,
+          default: false,
+        },
+      },
+      default: {
+        active: true,
+        suspended: false,
+      },
+      es_indexed: false,
+    }, // account activated or not or blocked
+    followings: {
+      type: [
+        {
+          userId: String,
+          status: {
+            type: Boolean,
+            default: false,
+          },
+          following_date: {
+            type: Date,
+            default: Date.now,
+          },
+        },
+      ],
+      es_indexed: false,
+    },
+    followers: {
+      type: [
+        {
+          userId: String,
+          status: {
+            type: Boolean,
+            default: false,
+          },
+          follower_date: {
+            type: Date,
+            default: Date.now,
+          },
+        },
+      ],
+      es_indexed: false,
+    },
+    shortlists: {
+      type: [],
+      es_indexed: false,
+    }, // shortlists topics or categories
+    social_profile: {
+      type: {
+        facebook: {
+          access_token: String,
+          access_secret: String,
+        },
+        twitter: {
+          access_token: String,
+          access_secret: String,
+        },
+        linkedin: {
+          access_token: String,
+          access_secret: String,
+        },
+        google: {
+          googleId: String,
+        },
+      },
+      es_indexed: false,
+    },
+    featurePhotoOne: {
+      type: String,
+      es_indexed: false,
+    },
+    featurePhotoTwo: {
+      type: String,
+      es_indexed: false,
+    },
+    featurePhotoThree: {
+      type: String,
+      es_indexed: false,
+    },
+    featurePhotoFour: {
+      type: String,
+      es_indexed: false,
+    },
+    featurePhotoFive: {
+      type: String,
+      es_indexed: false,
+    },
+
+    optimizedFeaturedImages: {
+      es_indexed: false,
+      one: {
+        thumbnail: String,
+        large: String,
+      },
+      two: {
+        thumbnail: String,
+        large: String,
+      },
+      three: {
+        thumbnail: String,
+        large: String,
+      },
+      four: {
+        thumbnail: String,
+        large: String,
+      },
+      five: {
+        thumbnail: String,
+        large: String,
+      },
+    },
+
+    business_name: {
+      type: String,
+      es_indexed: true,
+      es_type: "text",
+      es_fields: {
+        completion: {
+          type: "completion",
+          analyzer: "standard",
+          preserve_position_increments: true,
+          preserve_separators: true,
+        },
+      },
+    }, // User business Infos business name
+    username: {
+      type: String,
+      unique: true,
+      es_indexed: true,
+      es_type: "text",
+    }, // Auto generated username(generate one time when user signup)
+    business_info: [
+      {
+        _id: {
+          type: mongoose.Schema.Types.ObjectId,
+          es_indexed: true,
+          es_type: "text",
+        },
+        businessName: {
           type: String,
           es_indexed: true,
-          es_type: 'text'
-        }
+          es_type: "text",
+        }, // User Business name
+        businessType: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "BussinessType",
+          es_indexed: true,
+          es_type: "nested",
+        },
+        businessCategory: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "BussinessCategory",
+          es_indexed: true,
+          es_type: "nested",
+        },
+        businessLocation: {
+          country: {
+            type: String,
+            es_indexed: true,
+            es_type: "text",
+          },
+          city: {
+            type: String,
+            es_indexed: true,
+            es_type: "text",
+          },
+          zip: {
+            type: Number,
+            es_indexed: true,
+            es_type: "text",
+          },
+          street: {
+            type: String,
+            es_indexed: true,
+            es_type: "text",
+          },
+          street2: {
+            type: String,
+            es_indexed: true,
+            es_type: "text",
+          },
+          state: {
+            type: String,
+            es_indexed: true,
+            es_type: "text",
+          },
+        },
+        businessTimes: {
+          monDay: {
+            openingTime: {
+              type: Date,
+              default: setOpeningTime,
+              es_indexed: false,
+              es_type: "text",
+            },
+            closingTime: {
+              type: Date,
+              default: setClosingTime,
+              es_indexed: false,
+              es_type: "text",
+            },
+            isOpen: {
+              type: Boolean,
+              default: true,
+              es_indexed: false,
+              es_type: "text",
+            },
+          },
+          tuesDay: {
+            openingTime: {
+              type: Date,
+              default: setOpeningTime,
+              es_indexed: false,
+              es_type: "text",
+            },
+            closingTime: {
+              type: Date,
+              default: setClosingTime,
+              es_indexed: false,
+              es_type: "text",
+            },
+            isOpen: {
+              type: Boolean,
+              default: true,
+              es_indexed: false,
+              es_type: "text",
+            },
+          },
+          wednesDay: {
+            openingTime: {
+              type: Date,
+              default: setOpeningTime,
+              es_indexed: false,
+              es_type: "text",
+            },
+            closingTime: {
+              type: Date,
+              default: setClosingTime,
+              es_indexed: false,
+              es_type: "text",
+            },
+            isOpen: {
+              type: Boolean,
+              default: true,
+              es_indexed: false,
+              es_type: "text",
+            },
+          },
+          thursDay: {
+            openingTime: {
+              type: Date,
+              default: setOpeningTime,
+              es_indexed: false,
+              es_type: "text",
+            },
+            closingTime: {
+              type: Date,
+              default: setClosingTime,
+              es_indexed: false,
+              es_type: "text",
+            },
+            isOpen: {
+              type: Boolean,
+              default: true,
+              es_indexed: false,
+              es_type: "text",
+            },
+          },
+          friDay: {
+            openingTime: {
+              type: Date,
+              default: setOpeningTime,
+              es_indexed: false,
+              es_type: "text",
+            },
+            closingTime: {
+              type: Date,
+              default: setClosingTime,
+              es_indexed: false,
+              es_type: "text",
+            },
+            isOpen: {
+              type: Boolean,
+              default: true,
+              es_indexed: false,
+              es_type: "text",
+            },
+          },
+          saturDay: {
+            openingTime: {
+              type: Date,
+              default: setOpeningTime,
+              es_indexed: false,
+              es_type: "text",
+            },
+            closingTime: {
+              type: Date,
+              default: setClosingTime,
+              es_indexed: false,
+              es_type: "text",
+            },
+            isOpen: {
+              type: Boolean,
+              default: false,
+              es_indexed: false,
+              es_type: "text",
+            },
+          },
+          sunDay: {
+            openingTime: {
+              type: Date,
+              default: setOpeningTime,
+              es_indexed: false,
+              es_type: "text",
+            },
+            closingTime: {
+              type: Date,
+              default: setClosingTime,
+              es_indexed: false,
+              es_type: "text",
+            },
+            isOpen: {
+              type: Boolean,
+              default: false,
+              es_indexed: false,
+              es_type: "text",
+            },
+          },
+        },
+        createdDate: {
+          type: Date,
+          default: Date.now,
+          es_indexed: false,
+          es_type: "text",
+        },
       },
-      businessTimes: {
-        monDay: {
-          openingTime: {
-            type: Date,
-            default: setOpeningTime,
-            es_indexed: false,
-            es_type: 'text'
-          },
-          closingTime: {
-            type: Date,
-            default: setClosingTime,
-            es_indexed: false,
-            es_type: 'text'
-          },
-          isOpen: {
-            type: Boolean,
-            default: true,
-            es_indexed: false,
-            es_type: 'text'
-          }
-        },
-        tuesDay: {
-          openingTime: {
-            type: Date,
-            default: setOpeningTime,
-            es_indexed: false,
-            es_type: 'text'
-          },
-          closingTime: {
-            type: Date,
-            default: setClosingTime,
-            es_indexed: false,
-            es_type: 'text'
-          },
-          isOpen: {
-            type: Boolean,
-            default: true,
-            es_indexed: false,
-            es_type: 'text'
-          }
-        },
-        wednesDay: {
-          openingTime: {
-            type: Date,
-            default: setOpeningTime,
-            es_indexed: false,
-            es_type: 'text'
-          },
-          closingTime: {
-            type: Date,
-            default: setClosingTime,
-            es_indexed: false,
-            es_type: 'text'
-          },
-          isOpen: {
-            type: Boolean,
-            default: true,
-            es_indexed: false,
-            es_type: 'text'
-          }
-        },
-        thursDay: {
-          openingTime: {
-            type: Date,
-            default: setOpeningTime,
-            es_indexed: false,
-            es_type: 'text'
-          },
-          closingTime: {
-            type: Date,
-            default: setClosingTime,
-            es_indexed: false,
-            es_type: 'text'
-          },
-          isOpen: {
-            type: Boolean,
-            default: true,
-            es_indexed: false,
-            es_type: 'text'
-          }
-        },
-        friDay: {
-          openingTime: {
-            type: Date,
-            default: setOpeningTime,
-            es_indexed: false,
-            es_type: 'text'
-          },
-          closingTime: {
-            type: Date,
-            default: setClosingTime,
-            es_indexed: false,
-            es_type: 'text'
-          },
-          isOpen: {
-            type: Boolean,
-            default: true,
-            es_indexed: false,
-            es_type: 'text'
-          }
-        },
-        saturDay: {
-          openingTime: {
-            type: Date,
-            default: setOpeningTime,
-            es_indexed: false,
-            es_type: 'text'
-          },
-          closingTime: {
-            type: Date,
-            default: setClosingTime,
-            es_indexed: false,
-            es_type: 'text'
-          },
-          isOpen: {
-            type: Boolean,
-            default: false,
-            es_indexed: false,
-            es_type: 'text'
-          }
-        },
-        sunDay: {
-          openingTime: {
-            type: Date,
-            default: setOpeningTime,
-            es_indexed: false,
-            es_type: 'text'
-          },
-          closingTime: {
-            type: Date,
-            default: setClosingTime,
-            es_indexed: false,
-            es_type: 'text'
-          },
-          isOpen: {
-            type: Boolean,
-            default: false,
-            es_indexed: false,
-            es_type: 'text'
-          }
-        }
+    ],
+    register_ip: {
+      type: String,
+      es_indexed: false,
+    },
+    unique_url: {
+      type: String,
+      unique: true,
+      lowercase: true,
+      es_indexed: false,
+    }, // Unique url for every user like http://bizen.com/example
+    salt: {
+      type: String,
+      es_indexed: false,
+    }, // unique salt for reset password
+    profile_pic: {
+      type: String,
+      es_indexed: true,
+      es_type: "text",
+    },
+    optimizedProfilePic: {
+      es_indexed: false,
+      size30: String,
+      thumbnail: String,
+      large: String,
+    },
+    cover_pic: {
+      type: String,
+      es_indexed: false,
+    },
+    aboutme: {
+      type: String,
+      es_indexed: false,
+    },
+    birthday: {
+      type: Date,
+      es_indexed: false,
+    },
+    gender: {
+      type: String,
+      es_indexed: false,
+    },
+    location: {
+      type: String,
+      es_indexed: true,
+      es_type: "text",
+    },
+    contactName: {
+      type: String,
+      es_indexed: false,
+    },
+    companyDescription: {
+      type: String,
+      es_indexed: false,
+      es_type: "text",
+    },
+    emailChange: {
+      email: {
+        type: String,
+        default: null,
       },
-      createdDate: {
+      securityCode: {
+        type: String,
+        default: null,
+      },
+      expired: {
         type: Date,
         default: Date.now,
-        es_indexed: false,
-        es_type: 'text'
-      }
-    }
-  ],
-  register_ip: {
-    type: String,
-    es_indexed: false
-  },
-  unique_url: {
-    type: String,
-    unique: true,
-    lowercase: true,
-    es_indexed: false
-  }, // Unique url for every user like http://bizen.com/example
-  salt: {
-    type: String,
-    es_indexed: false
-  }, // unique salt for reset password
-  profile_pic: {
-    type: String,
-    es_indexed: true,
-    es_type: 'text'
-  },
-  optimizedProfilePic: {
-    es_indexed: false,
-    size30: String,
-    thumbnail: String,
-    large: String
-  },
-  cover_pic: {
-    type: String,
-    es_indexed: false
-  },
-  aboutme: {
-    type: String,
-    es_indexed: false
-  },
-  birthday: {
-    type: Date,
-    es_indexed: false
-  },
-  gender: {
-    type: String,
-    es_indexed: false
-  },
-  location: {
-    type: String,
-    es_indexed: true,
-    es_type: 'text'
-  },
-  contactName: {
-    type: String,
-    es_indexed: false
-  },
-  companyDescription: {
-    type: String,
-    es_indexed: false,
-    es_type: 'text'
-  },
-  emailChange: {
-    email: {
-      type: String,
-      default: null
-    },
-    securityCode: {
-      type: String,
-      default: null
-    },
-    expired: {
-      type: Date,
-      default: Date.now
-    },
-    es_indexed: false
-  },
-  // subscribe to posts flag
-  subscribe_to_posts: {
-    type: Boolean,
-    default: true,
-    es_indexed: false
-  },
-  homeOnboarding: {
-    type: Boolean,
-    default: false,
-    es_indexed: false
-  },
-  profileOnboarding: {
-    type: Boolean,
-    default: false,
-    es_indexed: false
-  },
-  created_at: {
-    type: Date,
-    default: Date.now,
-    es_indexed: false
-  },
-  updated_at: {
-    type: Date,
-    es_indexed: false
-  },
-  logins: [
-    {
-      ip: {
-        type: String,
-        es_indexed: false
       },
-      time: {
-        type: Date,
-        es_indexed: false
-      }
-    }
-  ],
-  metaTags: {
-    title: {
-      type: String,
-      default: null
+      es_indexed: false,
     },
-    description: {
-      type: String,
-      default: null
+    // subscribe to posts flag
+    subscribe_to_posts: {
+      type: Boolean,
+      default: true,
+      es_indexed: false,
     },
-    facebook_title: {
-      type: String,
-      default: null
+    homeOnboarding: {
+      type: Boolean,
+      default: false,
+      es_indexed: false,
     },
-    facebook_description: {
-      type: String,
-      default: null
+    profileOnboarding: {
+      type: Boolean,
+      default: false,
+      es_indexed: false,
     },
-    twitter_title: {
-      type: String,
-      default: null
+    created_at: {
+      type: Date,
+      default: Date.now,
+      es_indexed: false,
     },
-    twitter_description: {
-      type: String,
-      default: null
+    updated_at: {
+      type: Date,
+      es_indexed: false,
     },
-  }
-}, { usePushEach: true });
+    logins: [
+      {
+        ip: {
+          type: String,
+          es_indexed: false,
+        },
+        time: {
+          type: Date,
+          es_indexed: false,
+        },
+      },
+    ],
+    metaTags: {
+      title: {
+        type: String,
+        default: null,
+      },
+      description: {
+        type: String,
+        default: null,
+      },
+      facebook_title: {
+        type: String,
+        default: null,
+      },
+      facebook_description: {
+        type: String,
+        default: null,
+      },
+      twitter_title: {
+        type: String,
+        default: null,
+      },
+      twitter_description: {
+        type: String,
+        default: null,
+      },
+    },
+  },
+  { usePushEach: true }
+);
 /*
  |--------------------------------------------------------------------------
  | Hide password
@@ -596,9 +599,9 @@ UserSchema.methods.toJSON = function () {
  | Password hash create
  |--------------------------------------------------------------------------
 */
-UserSchema.pre('save', function (next) {
+UserSchema.pre("save", function (next) {
   var self = this;
-  if (!self.isModified('password')) return next();
+  if (!self.isModified("password")) return next();
   bcrypt.genSalt(10, function (err, salt) {
     if (err) return next(err);
     bcrypt.hash(self.password, salt, null, function (err, hash) {
@@ -621,23 +624,23 @@ UserSchema.plugin(mongoosastic, {
   // esClient: elastic.client,
   populate: [
     {
-      path: 'business_info.businessType',
-      model: 'BussinessType',
-      select: 'bussinessTypeName'
+      path: "business_info.businessType",
+      model: "BussinessType",
+      select: "bussinessTypeName",
     },
     {
-      path: 'business_info.businessCategory',
-      model: 'BussinessCategory',
-      select: 'bussinessCategoryName'
-    }
-  ]
+      path: "business_info.businessCategory",
+      model: "BussinessCategory",
+      select: "bussinessCategoryName",
+    },
+  ],
 });
 
 /*var currentStateFinal = async function(obj) {
   //console.log('this', obj.parent().address.state);
   return await obj.parent().address.state;
 };*/
-var currentState = 'undefined';
+var currentState = "undefined";
 function setOpeningTime() {
   /*//console.log('before current---->', currentState);
   if(currentState == 'undefined') {
@@ -653,7 +656,6 @@ function setOpeningTime() {
   });
   //console.log('state time', stateTime);
   var finalTime = (9 - (parseInt(stateTime[0].time)));*/
-
 
   var openingTime = new Date();
   //console.log('Time Zone--->', openingTime.getTimezoneOffset()/-60);
@@ -738,7 +740,7 @@ function stateExist(states) {
   return states;
 }
 */
-var Model = mongoose.model('User', UserSchema);
+var Model = mongoose.model("User", UserSchema);
 
 //console.log('Final model', Model);
 

@@ -4,23 +4,23 @@ const Schema = mongoose.Schema;
 const RoleSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
-    ref: 'user'
+    ref: "user",
   },
   role: {
-    type: String
+    type: String,
   },
   resource: {
-    type: String
+    type: String,
   },
   action: {
-    type: Array
+    type: Array,
   },
   attributes: {
-    type: String
+    type: String,
   },
   extend: {
-    type: String
-  }
+    type: String,
+  },
 });
 
 const Role = mongoose.model("role", RoleSchema);

@@ -44,9 +44,8 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                   <h4 className="card-title"> Create User Account</h4>
                   <p className="card-category">Only Admin can create</p>
                 </div>
-                <div className="card-body">                   
-                    <form className="form" onSubmit={(e) => onSubmit(e)}>
-
+                <div className="card-body">
+                  <form className="form" onSubmit={(e) => onSubmit(e)}>
                     <div className="row">
                       <div className="col-md">
                         <div className="form-group">
@@ -97,7 +96,9 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                     <div className="row">
                       <div className="col-md">
                         <div className="form-group">
-                          <label className="bmd-label-floating">Confirm Password</label>
+                          <label className="bmd-label-floating">
+                            Confirm Password
+                          </label>
                           <input
                             type="password"
                             className="form-control"
@@ -112,28 +113,31 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                     <div className="row">
                       <div className="col-md">
                         <div className="form-group">
-                          <label className="bmd-label-floating">* Select User Role</label>
-                          <select className="form-control"
-                          name="role"
-                          value={role}
-                          onChange={(e) => onChange(e)}
-                        >
-                          <option value="0">* Select User Role</option>
-                          <option value="basic_user">Basic User</option>
-                          <option value="teamlead">TeamLead</option>
-                          <option value="admin">Admin</option>
-                        </select>
-                        <small className="form-text">
-                          Give you an idea of what a user can perform
-                        </small>
+                          <label className="bmd-label-floating">
+                            * Select User Role
+                          </label>
+                          <select
+                            className="form-control"
+                            name="role"
+                            value={role}
+                            onChange={(e) => onChange(e)}
+                          >
+                            <option value="0">* Select User Role</option>
+                            <option value="basic_user">Basic User</option>
+                            <option value="teamlead">TeamLead</option>
+                            <option value="admin">Admin</option>
+                          </select>
+                          <small className="form-text">
+                            Give you an idea of what a user can perform
+                          </small>
                         </div>
                       </div>
-                    </div>                                                      
-                      <input
-                        type="submit"
-                        className="btn btn-primary"
-                        value="Create User"
-                      />                 
+                    </div>
+                    <input
+                      type="submit"
+                      className="btn btn-primary"
+                      value="Create User"
+                    />
                     <hr />
                     <div className="clearfix"></div>
                   </form>
@@ -143,8 +147,9 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             <div className="col-md-4">
               <div className="card card-profile">
                 <div className="card-avatar">
-                  <Link to="javascript:;">
-                    <img className="img" src="../assets/img/faces/marc.jpg" />
+                  {/* /<Link to="javascript:;"> */}
+                  <Link to="/dashboard">
+                    <img className="img" alt="card-profile" src="../assets/img/faces/marc.jpg" />
                   </Link>
                 </div>
                 <div className="card-body">
@@ -155,7 +160,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                     human foundation in truth And I love you like Kanye loves
                     Kanye I love Rick Owens’ bed design but the back is...
                   </p>
-                  <Link to="javascript:;" className="btn btn-primary btn-round">
+                  <Link to="/dashboard" className="btn btn-primary btn-round">
                     Follow
                   </Link>
                 </div>
@@ -181,4 +186,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, { setAlert, register })(Register);
-

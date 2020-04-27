@@ -1,47 +1,55 @@
-import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { logout } from '../../actions/auth';
+import React, { Fragment } from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { logout } from "../../actions/auth";
 
-const Navbar = ({ auth: { isAuthenticated }, logout }) => {
+const Navbar = ({ auth: { isAuthenticated, user }, logout }) => {
   const authLinks = (
     <ul>
       <li>
-        <Link to='/'>AdminPanel</Link>
+      {isAuthenticated ? user.name : null}
+     
       </li>
-
+    
       <li>
-        <Link to='/dashboard'>
-          <i className='fas fa-user' />{' '}
-          <span className='hide-sm'>Dashboard</span>
+        <Link to="/dashboard">
+          <i className="fas fa-user" />{" "}
+          <span className="hide-sm">Dashboard</span>
         </Link>
       </li>
       <li>
-        <a onClick={logout} href='#!'>
-          <i className='fas fa-sign-out-alt' />{' '}
-          <span className='hide-sm'>Logout</span>
+        <a onClick={logout} href="#!">
+          <i className="fas fa-sign-out-alt" />{" "}
+          <span className="hide-sm">Logout</span>
         </a>
       </li>
     </ul>
   );
 
   const guestLinks = (
-    <ul>
-      <li>
-        <Link to="/">AdminPanel</Link>
-      </li>
+    // <ul>
      
-      <li>
-        <Link to='/login'>Login</Link>
-      </li>
-    </ul>
+<div></div>
+    //   <li>
+    //     <Link to="/login">Login</Link>
+    //   </li>
+    // </ul>
   );
 
   return (
-    <nav className='navbar1 bg-dark'>
+    <nav className="navbar1 bg-dark">
       <h1>
-        <Link to="/"><i className="logo"> <img src="./assets/images/logo.svg" id="company-logo" alt="logo" /> </i></Link>
+        <Link to="/">
+          <i className="logo">
+            {" "}
+            <img
+              src="./assets/images/logo.svg"
+              id="company-logo"
+              alt="logo"
+            />{" "}
+          </i>
+        </Link>
       </h1>
       <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
     </nav>
@@ -50,14 +58,11 @@ const Navbar = ({ auth: { isAuthenticated }, logout }) => {
 
 Navbar.propTypes = {
   logout: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = state => ({
-  auth: state.auth
+const mapStateToProps = (state) => ({
+  auth: state.auth,
 });
 
-export default connect(
-  mapStateToProps,
-  { logout }
-)(Navbar);
+export default connect(mapStateToProps, { logout })(Navbar);

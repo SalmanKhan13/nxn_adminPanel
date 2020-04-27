@@ -1,5 +1,5 @@
-const { validationResult } = require('express-validator');
-const Products = require('../helpers/products-import');
+const { validationResult } = require("express-validator");
+const Products = require("../helpers/products-import");
 
 /*
  |--------------------------------------------------------------------------
@@ -7,14 +7,13 @@ const Products = require('../helpers/products-import');
  |--------------------------------------------------------------------------
 */
 exports.upload = function (req, res) {
-
   const fileError = req.fileError;
   const fieldErrors = validationResult(req);
   const errors = fieldErrors.isEmpty() ? [] : fieldErrors.array();
 
   // file error if any...
   if (fileError) {
-    errors.push(fileError)
+    errors.push(fileError);
   }
 
   if (errors && errors.length) {

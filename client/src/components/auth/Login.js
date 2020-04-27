@@ -74,7 +74,7 @@ const Login = (props) => {
                       className='btn btn-primary  pull-right"'
                       value="Login"
                     />
-                    <span ></span>
+                    <span></span>
                     <Link to="/resetpassword" className="pull-right">
                       <i className="fas fa-user " />{" "}
                       <span className="hide-sm ">Forgot Password</span>
@@ -84,27 +84,7 @@ const Login = (props) => {
                 </div>
               </div>
             </div>
-            <div className="col-md-4">
-              <div className="card card-profile">
-                <div className="card-avatar">
-                  <Link to="javascript:;">
-                    <img className="img" src="../assets/img/faces/marc.jpg" />
-                  </Link>
-                </div>
-                <div className="card-body">
-                  <h6 className="card-category text-gray">CEO / Co-Founder</h6>
-                  <h4 className="card-title">Mubashar Ehsan</h4>
-                  <p className="card-description">
-                    Don't be scared of the truth because we need to restart the
-                    human foundation in truth And I love you like Kanye loves
-                    Kanye I love Rick Owens’ bed design but the back is...
-                  </p>
-                  <Link to="javascript:;" className="btn btn-primary btn-round">
-                    Follow
-                  </Link>
-                </div>
-              </div>
-            </div>
+            
           </div>
         </div>
       </div>

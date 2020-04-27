@@ -1,17 +1,15 @@
-import React from 'react';
-import Navbar from '../layout/Navbar';
-import Routes from './Routes';
-import Footer from '../layout/Footer';
+import React from "react";
+import Routes from "./Routes";
+import Sidebar from "../layout/Sidebar";
+import Footer from "../layout/Footer";
 
 const MainPanel = () => {
-    return (  
-        <div className="main-panel">     
-            <Navbar/>           
-            <Routes/>
-            <Footer/>  
-               
-        </div>
-       
-    )
-}
+  return (
+    <div className="main-panel">
+      <Sidebar />
+      <Routes />
+      <Footer />
+    </div>
+  );
+};
 export default MainPanel;

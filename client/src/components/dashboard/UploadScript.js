@@ -150,7 +150,6 @@ const UploadScript = (props) => {
                     </div>
 
                     <div className="form-group">
-                     
                       <input
                         type="file"
                         placeholder="Choose File"
@@ -165,7 +164,6 @@ const UploadScript = (props) => {
                         placeholder="Choose File"
                         name="csvFile"
                         id="csvfile"
-                        
                         multiple
                         type="file"
                         onChange={onFileChange}
@@ -186,8 +184,8 @@ const UploadScript = (props) => {
             <div className="col-md-4">
               <div className="card card-profile">
                 <div className="card-avatar">
-                  <Link to="javascript:;">
-                    <img className="img" src="../assets/img/faces/marc.jpg" />
+                  <Link to="/uploadscript">
+                    <img className="img" alt="uploadscript" src="../assets/img/faces/marc.jpg" />
                   </Link>
                 </div>
                 <div className="card-body">
@@ -198,7 +196,7 @@ const UploadScript = (props) => {
                     human foundation in truth And I love you like Kanye loves
                     Kanye I love Rick Owens’ bed design but the back is...
                   </p>
-                  <Link to="javascript:;" className="btn btn-primary btn-round">
+                  <Link to="/uploadscript" className="btn btn-primary btn-round">
                     Follow
                   </Link>
                 </div>
@@ -208,67 +206,6 @@ const UploadScript = (props) => {
         </div>
       </div>
     </Fragment>
-
-    // <Fragment>
-    //   <h1 className="large text-primary">Product Upload Page</h1>
-    //   <p className="lead">
-    //     <i className="fas fa-user" /> Upload your files here!
-    //   </p>
-    //   <form className="form" onSubmit={onSubmit}>
-    //     <div className="form-group">
-    //       <label htmlFor="user_email_doc">Email address (document)</label>
-    //       <AsyncSelect
-    //         placeholder="Select email you receive"
-    //         loadingMessage={() => "Searching through users"}
-    //         name="user_email_doc"
-    //         id="user_email_doc"
-    //         onChange={onSearchChange}
-    //         isClearable
-    //         defaultOptions={false}
-    //         loadOptions={loadOptions}
-    //       />
-    //       <small id="user_email_doc" className="form-text text-muted">
-    //         This email is used to to send document.
-    //       </small>
-    //     </div>
-
-    //     <div className="form-group">
-    //       <label htmlFor="user_email">Email address</label>
-    //       <AsyncSelect
-    //         placeholder="Select user email"
-    //         loadingMessage={() => "Searching through users"}
-    //         name="user_email"
-    //         id="user_email"
-    //         onChange={onSearchChange}
-    //         isClearable
-    //         defaultOptions
-    //         loadOptions={loadOptions}
-    //       />
-    //       <small id="user_email" className="form-text text-muted">
-    //         This email is used to get an email if anything goes wrong.
-    //       </small>
-    //     </div>
-
-    //     <div className="form-group">
-    //       <label htmlFor="catalog">Catalog*</label>
-    //       <Select
-    //         name="catalog"
-    //         options={catalogsList}
-    //         onChange={onCatalogChange}
-    //       />
-    //     </div>
-
-    //     <div className="form-group">
-    //       <input type="file" placeholder="Choose File" name="csvFile" id="csvfile" onChange={onFileChange} />
-    //     </div>
-
-    //     <input
-    //       type="submit"
-    //       className="btn btn-primary "
-    //       value="Upload"
-    //     />
-    //   </form>
-    // </Fragment>
   );
 };
 

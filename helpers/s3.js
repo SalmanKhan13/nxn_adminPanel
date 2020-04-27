@@ -1,13 +1,13 @@
-'use strict';
-var env = process.env.NODE_ENV || 'development';
-var AWS = require('aws-sdk');
-var fs = require('fs');
-var Config = require('./config');
+"use strict";
+var env = process.env.NODE_ENV || "development";
+var AWS = require("aws-sdk");
+var fs = require("fs");
+var Config = require("./config");
 var BucketName = Config[env].Bucket;
-var IMSBuckterName = '/ims-production-bucket/';
+var IMSBuckterName = "/ims-production-bucket/";
 var Auth = {
   accessKeyId: Config.Aws.AuthStorage.accessKey,
-  secretAccessKey: Config.Aws.AuthStorage.secretKey
+  secretAccessKey: Config.Aws.AuthStorage.secretKey,
   // region: 'us-west-2'
 };
 var s3 = new AWS.S3(Auth);
@@ -19,8 +19,8 @@ exports.bucketCreate = function (bucket_name, permission, location, next) {
     /* required */
     ACL: permission, // 'private | public-read | public-read-write | authenticated-read',
     CreateBucketConfiguration: {
-      LocationConstraint: location // 'EU | eu-west-1 | us-west-1 | us-west-2 | ap-southeast-1 | ap-southeast-2 | ap-northeast-1 | sa-east-1 | cn-north-1 | eu-central-1'
-    }
+      LocationConstraint: location, // 'EU | eu-west-1 | us-west-1 | us-west-2 | ap-southeast-1 | ap-southeast-2 | ap-northeast-1 | sa-east-1 | cn-north-1 | eu-central-1'
+    },
   };
   s3.createBucket(params, function (err, data) {
     next(err, data);
@@ -30,7 +30,7 @@ exports.bucketCreate = function (bucket_name, permission, location, next) {
 exports.bucketDel = function (bucket_name, next) {
   s3.deleteBucket(
     {
-      Bucket: bucket_name
+      Bucket: bucket_name,
     },
     function (err, data) {
       next(err, data);
@@ -44,7 +44,7 @@ exports.upFile = function (key, file, type, next) {
     Key: key,
     ContentType: type,
     Body: file,
-    ACL: 'public-read'
+    ACL: "public-read",
   };
   s3.upload(params, function (err, data) {
     next(err, data);
@@ -57,7 +57,7 @@ exports.putObj = function (key, file, type, next) {
     Key: key,
     ContentType: type,
     Body: file,
-    ACL: 'public-read'
+    ACL: "public-read",
   };
   s3.putObject(params, function (err, data) {
     next(err, data);
@@ -68,7 +68,7 @@ exports.delFile = function (key, next) {
   var params = {
     Bucket: BucketName,
     /* required */
-    Key: key
+    Key: key,
     /* required */
     // MFA: 'STRING_VALUE',
     // RequestPayer: 'requester',
@@ -84,8 +84,8 @@ exports.delMultipleFile = function (objects, next) {
     Bucket: BucketName,
     /* required */
     Delete: {
-      Objects: objects
-    }
+      Objects: objects,
+    },
     /* required */
     // MFA: 'STRING_VALUE',
     // RequestPayer: 'requester',
@@ -103,7 +103,7 @@ exports.copyFile = function (sourceKey, destinationKey, next) {
     Bucket: BucketName,
     CopySource: finalSourceKey,
     Key: destinationKey,
-    ACL: 'public-read'
+    ACL: "public-read",
   };
   s3.copyObject(params, function (err, data) {
     next(err, data);
