@@ -28,10 +28,14 @@ exports.csvFileRecordsFeedback = function (userInfo) {
 
 function csvFileRecordsFeedbackTemplate(userInfo) {
   // Find Thank you email template
-  var path = require("path").join(
-    __dirname,
-    "../app/views/email-template/feedback-products-bulk.html"
-  );
+// <<<<<<< HEAD
+//   var path = require("path").join(
+//     __dirname,
+//     "../app/views/email-template/feedback-products-bulk.html"
+//   );
+//=======
+  var path = require('path').join(__dirname, '../views/email-template/feedback-products-bulk.html');
+//>>>>>>> ca0c83b1069245448b09d15f914819bc1ca7fc44
 
   // Read file synchronously and encode it 'utf8'
   var html = require("fs").readFileSync(path, "utf8");
