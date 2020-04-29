@@ -11,7 +11,6 @@ const request = require("request");
 const async = require("async");
 const URL = require("url").URL;
 const path = require("path");
-
 const Product = require("../models/product.model");
 const S3 = require("./s3");
 

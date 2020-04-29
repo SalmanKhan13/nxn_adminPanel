@@ -1,5 +1,5 @@
 var Mail = require("./mail");
-var config = require("./config"); // Called token secret key
+var config = require("../config/config"); // Called token secret key
 var _ = require("underscore"); // used Underscore for template settings
 var environment = process.env.NODE_ENV || "development";
 var awsBucketBasePath = "https://seebiz-images.s3.amazonaws.com";

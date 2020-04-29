@@ -3,10 +3,12 @@ const User = require("../models/user.model.js");
 const Users = require("../models/Users");
 const { validationResult } = require("express-validator");
 const _ = require("lodash");
-const config = require("config");
 const bcrypt = require("bcryptjs");
 const { roles } = require("../roles");
 const nodemailer = require("nodemailer");
+const config = require("../config/config");
+var env = process.env.NODE_ENV || "development";
+var jwtToken = config[env].jwtSecret;
 
 /*
  |--------------------------------------------------------------------------
@@ -17,9 +19,9 @@ exports.grantAccess = function (action, resource) {
   return async (req, res, next) => {
     try {
       const user = res.locals.loggedInUser;
-      console.log("----------------------------- " + user.role);
+      //console.log("----------------------------- " + user.role);
       const permission = roles.can(user.role)[action](resource); //req.user.role
-      console.log(permission);
+      //console.log(permission);
       if (!permission.granted) {
         return res.status(401).json({
           error: "You don't have enough permission to perform this action",
@@ -136,7 +138,7 @@ exports.createUser= async (req, res) => {
 
     jwt.sign(
       payload,
-      config.get("jwtSecret"),
+      jwtToken,
       { expiresIn: 360000 },
       (err, token) => {
         if (err) throw err;
@@ -157,7 +159,8 @@ exports.createUser= async (req, res) => {
  |--------------------------------------------------------------------------
 */
 
-exports.loginUser=async (req, res) => {
+exports.loginUser= async (req, res) => {
+  console.log('i m here');
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -189,7 +192,7 @@ exports.loginUser=async (req, res) => {
       userId: user._id,
     };
 
-    const token = jwt.sign(payload, config.get("jwtSecret"), {
+    const token = jwt.sign(payload, jwtToken, {
       expiresIn: 360000,
     });
 
@@ -289,7 +292,7 @@ exports.forgotPasswordController = async (req, res) => {
           {
             _id: user._id,
           },
-          config.get("jwtSecret"),
+          jwtToken,
           {
             expiresIn: "60m",
           }
@@ -359,7 +362,7 @@ exports.resetPasswordController = async (req, res) => {
     });
   } else {
     if (resetPasswordLink) {
-      jwt.verify(resetPasswordLink, config.get("jwtSecret"), function (
+      jwt.verify(resetPasswordLink, jwtToken, function (
         err,
         decoded
       ) {

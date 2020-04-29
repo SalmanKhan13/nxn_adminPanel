@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
-const config = require('config');
-const db = config.get('mongoURI');
-
+const config = require('./config');
+const env = process.env.NODE_ENV || 'development';
+const db = config[env].db;
+//console.log('jwt', config[env]);
 const connectDB = async () => {
   try {
     await mongoose.connect(db, {

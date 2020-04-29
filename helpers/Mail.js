@@ -1,11 +1,7 @@
-//var AWS = require('aws-sdk');
-var Config = require("./config");
+var Config = require("../config/config");
 const nodemailer = require("nodemailer");
-var environment = process.env.NODE_ENV || "development"; // Server environment
-//var mailAddress = 'noreply@seebiz.com';
-//var supportAddress = 'contact@seebiz.com';
-var mailAddress = Config[environment].mailAddress;
-var supportMailAddress = Config[environment].supportAddress;
+var env = process.env.NODE_ENV || "development"; // Server environment
+var mailAddress = Config[env].mailAddress;
 
 const sendMailWithAttachments = (
   from,

@@ -2,7 +2,7 @@
 var env = process.env.NODE_ENV || "development";
 var AWS = require("aws-sdk");
 var fs = require("fs");
-var Config = require("./config");
+var Config = require("../config/config");
 var BucketName = Config[env].Bucket;
 var IMSBuckterName = "/ims-production-bucket/";
 var Auth = {
