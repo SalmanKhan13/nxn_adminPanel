@@ -21,9 +21,7 @@ const App = () => {
           <Route exact path="/login" component={Login} />
           <Route exact path="/resetpassword" component={ResetPassword} />
           <Route exact path="/reset/:token" component={Reset} />
-         
           <MainPanel />
-       
           </Switch>
         </Router>
       </Fragment>

@@ -19,7 +19,7 @@ const ResetPassword = ({ forgotpassword }) => {
   return (
     <Fragment>
       <div className="content">
-        <div className="container-fluid">
+        <div className="container">
           <div className="row">
             <div className="col-md-8">
               <div className="card">
@@ -69,7 +69,7 @@ const ResetPassword = ({ forgotpassword }) => {
                   <Link to="/resetpassword">
                     <img
                       className="img" alt="resetpassword"
-                      src="../assets/img/faces/card-profile1-square.jpg"
+                      src="../assets/img/faces/mubashare.jpg"
                     />
                   </Link>
                 </div>

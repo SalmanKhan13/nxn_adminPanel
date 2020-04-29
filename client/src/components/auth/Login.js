@@ -28,7 +28,7 @@ const Login = (props) => {
   return (
     <Fragment>
       <div className="content">
-        <div className="container-fluid">
+        <div className="container">
           <div className="row">
             <div className="col-md-8">
               <div className="card">

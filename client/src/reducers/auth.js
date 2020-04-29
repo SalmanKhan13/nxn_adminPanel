@@ -21,7 +21,7 @@ const initialState = {
   token: localStorage.getItem("token"),
   isAuthenticated: localStorage.getItem("token") ? true : false,
   user: JSON.parse(localStorage.getItem("user")),
-  users: JSON.parse(localStorage.getItem("users")),
+  users: JSON.parse(localStorage.getItem("users"))
 };
 
 export default function (state = initialState, action) {

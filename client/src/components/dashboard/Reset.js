@@ -31,7 +31,7 @@ const Reset = ({ match, resetpassword }) => {
   return (
     <Fragment>
       <div className="content">
-        <div className="container-fluid">
+        <div className="container">
           <div className="row">
             <div className="col-md-8">
               <div className="card">
@@ -95,7 +95,7 @@ const Reset = ({ match, resetpassword }) => {
               <div className="card card-profile">
                 <div className="card-avatar">
                   <Link to="/reset">
-                    <img className="img" alt="reset" src="../assets/img/faces/avatar.jpg" />
+                    <img className="img" alt="reset" src="../assets/img/faces/mubashare.jpg" />
                   </Link>
                 </div>
                 <div className="card-body">

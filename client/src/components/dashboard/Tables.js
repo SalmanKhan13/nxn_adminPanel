@@ -1,7 +1,38 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
-const Tables = ({ auth: { users } }) => {
+const Tables = ({ auth: { users, user } }) => {
+  const checkRole =
+    user.role === "admin" ? (
+      <div className="card-body">
+        <div className="table-responsive">
+          <table id="example2" className="table">
+            <thead className=" text-primary">
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role </th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user._id}>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td className="text-primary">{user.role}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    ) : (
+      <div className="text-danger">
+        {" "}
+        You don't have permission to View this table
+      </div>
+    );
+
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "assets/js/content.js";
@@ -22,28 +53,7 @@ const Tables = ({ auth: { users } }) => {
                   Here is a subtitle for this table
                 </p>
               </div>
-              <div className="card-body">
-                <div className="table-responsive">
-                  <table id="example2" className="table">
-                    <thead className=" text-primary">
-                      <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Role </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {users.map((user) => (
-                        <tr key={user._id}>
-                          <td>{user.name}</td>
-                          <td>{user.email}</td>
-                          <td className="text-primary">{user.role}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+              {checkRole}
             </div>
           </div>
           <div className="col-md-12">

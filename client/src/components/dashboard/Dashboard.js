@@ -10,7 +10,7 @@ const Dashboard = ({ auth: { user } }) => {
       <div className='text-success'>Upload_File</div>
     );
   const createUser =
-    user.role === "admin"|| user.role==="teamlead" ? (
+    user.role === "admin" ? (
       <Link to="/register">Create_User</Link>
     ) : (
      <div className='text-success'>Create_User</div> 

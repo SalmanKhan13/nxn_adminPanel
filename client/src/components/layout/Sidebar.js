@@ -52,7 +52,7 @@ const Sidebar = () => {
               to="./tables"
             >
               <i className="material-icons">content_paste</i>
-              <p>Table List</p>
+              <p>Admin List</p>
             </NavLink>
           </li>
           <li className="nav-item ">

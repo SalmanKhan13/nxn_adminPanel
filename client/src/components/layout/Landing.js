@@ -22,7 +22,7 @@ export const Landing = () => {
       <section id="about">
         <h1>About</h1>
         <p>
-          This is a admin-panel used by different teams of SeeBiz inc.The admin panel is where the content is created and the website is managed.
+          This is an admin-panel used by different teams of SeeBiz inc.The admin panel is where the content is created and the website is managed.
           This is the key to how a content management system (CMS) works.Feel free
           to use this panel for your productivity.
         </p>

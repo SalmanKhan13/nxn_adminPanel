@@ -149,7 +149,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                 <div className="card-avatar">
                   {/* /<Link to="javascript:;"> */}
                   <Link to="/dashboard">
-                    <img className="img" alt="card-profile" src="../assets/img/faces/marc.jpg" />
+                    <img className="img" alt="card-profile" src="../assets/img/faces/mubashare.jpg" />
                   </Link>
                 </div>
                 <div className="card-body">

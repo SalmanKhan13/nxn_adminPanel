@@ -185,7 +185,7 @@ const UploadScript = (props) => {
               <div className="card card-profile">
                 <div className="card-avatar">
                   <Link to="/uploadscript">
-                    <img className="img" alt="uploadscript" src="../assets/img/faces/marc.jpg" />
+                    <img className="img" alt="uploadscript" src="../assets/img/faces/mubashare.jpg" />
                   </Link>
                 </div>
                 <div className="card-body">
