@@ -12,24 +12,19 @@ const sendMailWithAttachments = (
   next
 ) => {
   const transporter = nodemailer.createTransport({
-    service: "gmail",
-    secure: "false",
+    host: "smtp-relay.sendinblue.com",
+    port: 587,
     auth: {
-      user: "salmank91922@gmail.com",
-      pass: "asif9999",
-    },
-    tls: {
-      rejectUnauthorized: false,
-    },
+      user: "zubair@seebiz.com",
+      pass: "tcHOzaqb5ZvG7Bx4"
+    }
+    // auth: {
+    //   user: "1fe25310eaae47",
+    //   pass: "b0c568fcad0783"
+    // }
   });
 
-  let options = {
-    from: "salmank91922@gmail.com", // sender address
-    to: "salmank91922@gmail.com", // list of receivers
-    subject, // Subject line
-    html: body,
-    attachments: attachments,
-  };
+  const options = {from, to, subject, html: body};
   if (attachments) {
     options.attachments = attachments;
   }

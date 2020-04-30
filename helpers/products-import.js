@@ -258,11 +258,11 @@ function formatProduct(product) {
   }
 }
 
-function saveProduct(product,slug) {
+function saveProduct(csv_product,slug) {
   return new Promise(function(resolve) {
-    console.log('product', product.SKU);
-    const productFormat = formatProduct({...product, slugPrefix: slug});
-    const productObj = {
+    console.log('product', csv_product.SKU);
+    const productFormat = formatProduct({...csv_product, slugPrefix: slug});
+    const  productObj = {
       ...productFormat,
       merchant_id: userId,
       catalogCategory: catalogId,
@@ -270,22 +270,23 @@ function saveProduct(product,slug) {
       images: [],
       optimizedImages: [],
     };
+    var newProduct = new Product(productObj);
     //console.log('product.Image_Url', product.Image_Url);
-    //console.log('productObj',productObj);
-    Product.findOneAndUpdate({merchant_id: userId, sku: product.SKU}, productObj, { upsert: true, new: true }, (err, doc, res) => {
+
+    newProduct.save(function (err, result) {
       if ( err ) {
         product.reason = 'unable to save - db message: ' + err.message;
         ignoredProducts.push(product);
       }
       var productArray =
-        {product_id:doc._id,
-          sku:product.SKU,
+        {product_id:result._id,
+          sku:csv_product.SKU,
           merchant_id: userId,
-          img_url:product.Image_Url,
-          name:product.Product_Name,
-          product_url : product.Product_url,
-          price: product.Selling_Price,
-          category: product.Category
+          img_url:csv_product.Image_Url,
+          name:csv_product.Product_Name,
+          product_url : csv_product.Product_url,
+          price: csv_product.Selling_Price,
+          category: csv_product.Category
         };
       //console.log('productArray', productArray);
       var params = {
@@ -296,19 +297,20 @@ function saveProduct(product,slug) {
       sqs.sendMessage(params, function(err, data) {
         if(err) {
           console.log('danger', 'SQS Error!', err);
-          var productLog = 'Send SQS Queue Message Error '+ JSON.stringify(product);
+          var productLog = 'Send SQS Queue Message Error '+ JSON.stringify(csv_product);
           log(productLog,'csv_product_images/csv-images.log');
-          sqs_err_products.push(product);
+          sqs_err_products.push(csv_product);
           resolve();
         }
         else {
-          console.log('successfully uploaded data to sqs', product.SKU);
+          console.log('successfully uploaded data to sqs', csv_product.SKU);
           console.log('*************');
           resolve();
         }
       });
+
     });
-    // create or update existing record...
+    // create new record...
   });
 }
 
