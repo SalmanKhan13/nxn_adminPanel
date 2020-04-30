@@ -43,6 +43,18 @@ module.exports = {
       accessKey: "AKIA2H3FXSCJU4OOHSOC", //'AKIAJSXHQ5M2DXCRUSNA',
       secretKey: "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", //'SYhmWYDdLVmDGdfFmhp54kLHG9dR4eAJRf1tPeHh',
       region: "us-west-2",
+    },
+    AuthSQS: {
+      production: {
+        "accessKeyId": "AKIA2H3FXSCJWFBNXWFU",
+        "secretAccessKey": "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",
+        "region": "us-east-2"
+      },
+      development: {
+        "accessKeyId": "AKIA2H3FXSCJWFBNXWFU",
+        "secretAccessKey": "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",
+        "region": "us-east-2"
+      }
     }
   },
 

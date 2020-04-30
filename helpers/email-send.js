@@ -49,7 +49,7 @@ function csvFileRecordsFeedbackTemplate(userInfo) {
  |--------------------------------------------------------------------------
 */
 
-// exports.transporter = 
+// exports.transporter =
 //   nodemailer.createTransport({
 //     service: "gmail",
 //     secure: "false",

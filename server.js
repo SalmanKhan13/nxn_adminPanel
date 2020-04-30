@@ -1,8 +1,11 @@
+
 const express = require("express");
 const connectDB = require("./config/db");
 const path = require("path");
 const bodyParser = require("body-parser");
 const morgan = require('morgan');
+const cors = require('cors');
+
 
 require("dotenv").config({
   path: path.join(__dirname, "./.env"),
@@ -14,6 +17,7 @@ const app = express();
 connectDB();
 
 // Init Middleware
+app.use(cors({origin: true, credentials: true}));
 app.use(express.json({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));

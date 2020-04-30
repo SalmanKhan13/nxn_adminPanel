@@ -1,0 +1,44 @@
+Updates
+ 1- Install npm i async log-to-file iconv-lite
+ 2- Create csv_product_images directory in root folder and csv-images.log file in it.
+ 3- Create uploads directory in root folder if directory not exists.
+ 4- Update config file AWS and add SQS credentials
+ 5- update product model and update optimize images with this:
+ optimizedImages: [
+       {
+         _id: {
+           type: mongoose.Schema.Types.ObjectId,
+           es_indexed: true,
+           es_type: 'text'
+         },
+         size500: {
+           type: String,
+           es_type: 'text',
+           es_indexed: true
+         },
+         size480: {
+           type: String,
+           es_type: 'text',
+           es_indexed: true
+         },
+         size250: {
+           type: String,
+           es_type: 'text',
+           es_indexed: true
+         },
+         size100: {
+           type: String,
+           es_type: 'text',
+           es_indexed: true
+         },
+         size80: {
+           type: String,
+           es_type: 'text',
+           es_indexed: true
+         }
+       }
+     ],
+
+Change Requests
+
+Bug Fixes

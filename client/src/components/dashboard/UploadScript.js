@@ -160,7 +160,7 @@ const UploadScript = (props) => {
                     </div>
                     <div>
                       <input
-                        accept="image/*"
+                        accept=".xlsx, .xls, .csv"
                         placeholder="Choose File"
                         name="csvFile"
                         id="csvfile"
@@ -227,3 +227,4 @@ export default connect(mapStateToProps, {
   searchUsers,
   searchCatalogs,
 })(UploadScript);
+
