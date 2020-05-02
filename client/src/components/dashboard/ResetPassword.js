@@ -63,7 +63,7 @@ const ResetPassword = ({ forgotpassword }) => {
                 </div>
               </div>
             </div>
-            <div className="col-md-4">
+            {/* <div className="col-md-4">
               <div className="card card-profile">
                 <div className="card-avatar">
                   <Link to="/resetpassword">
@@ -71,6 +71,7 @@ const ResetPassword = ({ forgotpassword }) => {
                       className="img" alt="resetpassword"
                       src="../assets/img/faces/mubashare.jpg"
                     />
+
                   </Link>
                 </div>
                 <div className="card-body">
@@ -86,7 +87,7 @@ const ResetPassword = ({ forgotpassword }) => {
                   </Link>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

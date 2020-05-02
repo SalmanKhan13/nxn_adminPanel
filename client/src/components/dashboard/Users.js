@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 
-const Tables = ({ auth: { users, user } }) => {
+const Users = ({ auth: { users, user } }) => {
   const checkRole =
     user.role === "admin" ? (
       <div className="card-body">
@@ -47,7 +47,7 @@ const Tables = ({ auth: { users, user } }) => {
           <div className="col-md-12">
             <div className="card">
               <div className="card-header card-header-primary">
-                <h4 className="card-title ">Admin-Users Table</h4>
+                <h4 className="card-title ">Users Table</h4>
                 <p className="card-category">
                   {" "}
                   Here is a subtitle for this table
@@ -56,7 +56,7 @@ const Tables = ({ auth: { users, user } }) => {
               {checkRole}
             </div>
           </div>
-          <div className="col-md-12">
+          {/* <div className="col-md-12">
             <div className="card card-plain">
               <div className="card-header card-header-primary">
                 <h4 className="card-title mt-0"> Table on Plain Background</h4>
@@ -211,7 +211,7 @@ const Tables = ({ auth: { users, user } }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
@@ -224,4 +224,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, {})(Tables);
+export default connect(mapStateToProps, {})(Users);

@@ -1,11 +1,10 @@
 import React, { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { setAlert } from "../../actions/alert";
 import { register } from "../../actions/auth";
 import PropTypes from "prop-types";
 
-const Register = ({ setAlert, register, isAuthenticated }) => {
+const CreateUser = ({ setAlert, register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -42,7 +41,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
               <div className="card">
                 <div className="card-header card-header-primary">
                   <h4 className="card-title"> Create User Account</h4>
-                  <p className="card-category">Only Admin can create</p>
+                  <p className="card-category">Now you can create it</p>
                 </div>
                 <div className="card-body">
                   <form className="form" onSubmit={(e) => onSubmit(e)}>
@@ -144,10 +143,10 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                 </div>
               </div>
             </div>
-            <div className="col-md-4">
+            {/* <div className="col-md-4">
               <div className="card card-profile">
                 <div className="card-avatar">
-                  {/* /<Link to="javascript:;"> */}
+                 
                   <Link to="/dashboard">
                     <img className="img" alt="card-profile" src="../assets/img/faces/mubashare.jpg" />
                   </Link>
@@ -165,7 +164,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
                   </Link>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -173,7 +172,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
   );
 };
 
-Register.propTypes = {
+CreateUser.propTypes = {
   setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
@@ -185,4 +184,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { setAlert, register })(Register);
+export default connect(mapStateToProps, { setAlert, register })(CreateUser);

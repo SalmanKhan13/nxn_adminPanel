@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="container-fluid">
-        <nav className="float-left">
+        {/* <nav className="float-left">
           <ul>
             <li>
               <Link to="https://www.creative-tim.com">SeeBiz Tim</Link>
@@ -20,15 +20,17 @@ const Footer = () => {
               <Link to="https://www.creative-tim.com/license">Licenses</Link>
             </li>
           </ul>
-        </nav>
+        </nav> */}
         <div className="copyright float-right">
           &copy;
-          <script>document.write(new Date().getFullYear())</script>, made with{" "}
+           made in{" "}
+          {new Date().getFullYear()}
           <i className="material-icons">favorite</i> by
-          <Link to="/dashboard" target="_blank">
-            SeeBiz Tim
+          <Link to="/dashboard" target="_blank"> 
+          {" "}
+            SeeBiz Team
           </Link>{" "}
-          for a better web.
+          
         </div>
       </div>
     </footer>

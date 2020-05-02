@@ -1,11 +1,12 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import Register from "../auth/Register";
+import CreateUser from "../auth/CreateUser";
 import Alert from "../layout/Alert";
 import Landing from "../layout/Landing";
 import Dashboard from "../dashboard/Dashboard";
-import Tables from "../dashboard/Tables";
+import Users from "../dashboard/Users";
 import UploadScript from "../dashboard/UploadScript";
+import UserProfile from "../dashboard/UserProfile";
 import NotFound from "../layout/NotFound";
 import PrivateRoute from "../routing/PrivateRoute";
 
@@ -18,10 +19,11 @@ const Routes = (props) => {
       <section className="container">
         <Alert />
         <Switch>
-          <PrivateRoute exact path="/register" component={Register} />
-          <PrivateRoute exact path="/uploadscript" component={UploadScript} />
+          <PrivateRoute exact path="/createuser" component={CreateUser} />
+          <PrivateRoute exact path="/uploadproduct" component={UploadScript} />
+          <PrivateRoute exact path="/userprofile" component={UserProfile} />
           <PrivateRoute exact path="/dashboard" component={Dashboard} />
-          <PrivateRoute exact path="/tables" component={Tables} />
+          <PrivateRoute exact path="/users" component={Users} />
           <Route component={NotFound} />
         </Switch>
       </section>

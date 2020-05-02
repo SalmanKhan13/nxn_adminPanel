@@ -91,7 +91,7 @@ const Reset = ({ match, resetpassword }) => {
                 </div>
               </div>
             </div>
-            <div className="col-md-4">
+            {/* <div className="col-md-4">
               <div className="card card-profile">
                 <div className="card-avatar">
                   <Link to="/reset">
@@ -111,7 +111,7 @@ const Reset = ({ match, resetpassword }) => {
                   </Link>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

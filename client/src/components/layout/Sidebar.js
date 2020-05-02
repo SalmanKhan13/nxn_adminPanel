@@ -36,7 +36,7 @@ const Sidebar = () => {
                 backgroundColor: "rgb(156, 39, 176)",
                 color: "white",
               }}
-              to="./user"
+              to="./userprofile"
             >
               <i className="material-icons">person</i>
               <p>User Profile</p>
@@ -49,13 +49,13 @@ const Sidebar = () => {
                  backgroundColor: "rgb(156, 39, 176)",
                 color: "white",
               }}
-              to="./tables"
+              to="./users"
             >
               <i className="material-icons">content_paste</i>
-              <p>Admin List</p>
+              <p>Users</p>
             </NavLink>
           </li>
-          <li className="nav-item ">
+          {/* <li className="nav-item ">
             <NavLink
               className="nav-link"
               activeStyle={{
@@ -132,7 +132,7 @@ const Sidebar = () => {
               <i className="material-icons">unarchive</i>
               <p>Upgrade to PRO</p>
             </NavLink>
-          </li>
+          </li> */}
         </ul>
       </div>
     </div>

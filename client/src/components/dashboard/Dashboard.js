@@ -5,13 +5,13 @@ import { connect } from "react-redux";
 const Dashboard = ({ auth: { user } }) => {
   const uploadScript =
     user.role === "admin"|| user.role==="teamlead" ? (
-      <Link to="/uploadscript">Upload_File</Link>
+      <Link to="/uploadproduct">Upload_File</Link>
     ) : (
       <div className='text-success'>Upload_File</div>
     );
   const createUser =
     user.role === "admin" ? (
-      <Link to="/register">Create_User</Link>
+      <Link to="/createuser">Create_User</Link>
     ) : (
      <div className='text-success'>Create_User</div> 
     );

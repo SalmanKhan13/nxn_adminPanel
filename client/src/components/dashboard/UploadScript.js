@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
@@ -96,7 +95,7 @@ const UploadScript = (props) => {
               <div className="card">
                 <div className="card-header card-header-primary">
                   <h4 className="card-title">Product Upload Page</h4>
-                  <p className="card-category">Admin can upload it only</p>
+                  <p className="card-category">Here is a subtitle for this table</p>
                 </div>
                 <div className="card-body">
                   <form className="form" onSubmit={(e) => onSubmit(e)}>
@@ -181,7 +180,7 @@ const UploadScript = (props) => {
                 </div>
               </div>
             </div>
-            <div className="col-md-4">
+            {/* <div className="col-md-4">
               <div className="card card-profile">
                 <div className="card-avatar">
                   <Link to="/uploadscript">
@@ -201,7 +200,7 @@ const UploadScript = (props) => {
                   </Link>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
