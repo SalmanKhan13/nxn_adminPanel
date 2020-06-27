@@ -17,7 +17,7 @@ const app = express();
 connectDB();
 
 // Init Middleware
-app.use(cors({origin: true, credentials: true}));
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));

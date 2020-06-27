@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
 const controllers = require("../../controllers/userController");
-const {forgotPasswordValidator,resetPasswordValidator,registerValidator,loginValidator} = require("../../helpers/valid");
+const { forgotPasswordValidator, resetPasswordValidator, registerValidator, loginValidator } = require("../../helpers/valid");
 
 // @route    POST api/users
 // @desc     Register user
 // @access   Public
 router.post(
-  "/",registerValidator,
+  "/", registerValidator,
   auth,
   controllers.grantAccess("updateAny", "product_upload"),
   controllers.createUser
@@ -20,7 +20,7 @@ router.post(
 router.post(
   "/auth",
   loginValidator,
- controllers.loginUser
+  controllers.loginUser
 );
 
 

@@ -14,7 +14,7 @@ const Product = require('../models/product.model');
 const S3 = require('./s3');
 const Config = require('../config/config');
 const log = require('log-to-file');
-aws.config = Config.Aws.AuthSQS[env];
+//aws.config = Config.Aws.AuthSQS[env];
 var sqs = new aws.SQS();
 const queueUrl = "https://sqs.us-east-2.amazonaws.com/704051122323/seebiz";
 var merchantId = '';
@@ -66,9 +66,9 @@ exports.uploadImages = (req, res) => {
       // format header for new csv file...
       this.csvFileHeader = headers.map(header => { return { 'id': header, 'title': header } });
       //remove description header from csv
-      for(let i = 0;i < this.csvFileHeader.length; i++){
-        if(this.csvFileHeader[i].id === 'Product_Description'){
-          this.csvFileHeader.splice(i,1);
+      for (let i = 0; i < this.csvFileHeader.length; i++) {
+        if (this.csvFileHeader[i].id === 'Product_Description') {
+          this.csvFileHeader.splice(i, 1);
         }
       }
       // avoid duplicate column add...
@@ -90,11 +90,11 @@ exports.uploadImages = (req, res) => {
     },
     async processData() {
       if (this.productsLength > 0) {
-        for(let j=0; j < this.productsLength; j++){
-          console.log('j',j+1);
+        for (let j = 0; j < this.productsLength; j++) {
+          console.log('j', j + 1);
           await updateImages(j);
           console.log('*********');
-          if ((j+1) === this.productsLength) {
+          if ((j + 1) === this.productsLength) {
             //console.log('inside if condition');
             this.sendMail();
           }
@@ -127,7 +127,7 @@ exports.uploadImages = (req, res) => {
       const attachments = [];
 
       if (ignoredProducts && ignoredProducts.length) {
-        createLog(ignoredProducts,'ignore-product-images');
+        createLog(ignoredProducts, 'ignore-product-images');
         const csvStringify = csvWriter.createObjectCsvStringifier({ header: this.csvFileHeader });
         attachments.push({
           filename: `${fileName}-ignored-images.csv`,
@@ -149,17 +149,17 @@ exports.uploadImages = (req, res) => {
     },
     response(type, intro, message) {
       //req.session.message = { type, intro, message };
-      res.json({'status': type, 'intro': intro, 'message': message});
+      res.json({ 'status': type, 'intro': intro, 'message': message });
     }
   }
 };
 
-async function updateImages (j){
+async function updateImages(j) {
   //console.log('i m here');
-  return new Promise(async function(resolve) {
+  return new Promise(async function (resolve) {
     let sqs_resp = await receiveSQSMessage();
     //console.log('sqs receive resp',sqs_resp);
-    if(sqs_resp.status === true){
+    if (sqs_resp.status === true) {
       //console.log('status is true');
       var product = JSON.parse(sqs_resp.product);
       //****************
@@ -167,13 +167,13 @@ async function updateImages (j){
       merchantId = product.merchant_id;
       var response = await copyFile(product, product.merchant_id);
       //console.log('response', response);
-      if ( response && response.status && response.files ) {
+      if (response && response.status && response.files) {
         // main image...
         const main_image = response.files[0][0].key;
         // more images...
         const moreImages = response.files.map(files => files[0].key);
         // optimized images...
-        const optimizedImages = response.files.map(files => { return {size500: files[1].key, size480: files[2].key, size250: files[3].key, size100: files[4].key, size80: files[5].key}; });
+        const optimizedImages = response.files.map(files => { return { size500: files[1].key, size480: files[2].key, size250: files[3].key, size100: files[4].key, size80: files[5].key }; });
         //console.log(optimizedImages);
         const productObj = {
           main_image: main_image,
@@ -181,7 +181,7 @@ async function updateImages (j){
           optimizedImages: optimizedImages,
         };
 
-        if ( response.message ) {
+        if (response.message) {
           // also add product image failure reason and add it to ignoredProducts...
           product.reason = response.message.join(' | ');
           ignoredProducts.push(getProductArray(product));
@@ -189,15 +189,15 @@ async function updateImages (j){
         }
 
         // create or update existing record...
-        Product.findOneAndUpdate({merchant_id: product.merchant_id, sku: product.sku}, productObj, { upsert: true, new: true }, (err, doc, res) => {
+        Product.findOneAndUpdate({ merchant_id: product.merchant_id, sku: product.sku }, productObj, { upsert: true, new: true }, (err, doc, res) => {
           //console.log('update product');
-          if ( err ) {
+          if (err) {
             product.reason = 'unable to save images - db message: ' + err.message;
             ignoredProducts.push(getProductArray(product));
             //console.log('ignoredProducts 205',ignoredProducts);
             resolve();
           }
-          console.log('Finally Done - Images uploaded for: ',product.sku , ' ---- ',j+1); //database operation done...
+          console.log('Finally Done - Images uploaded for: ', product.sku, ' ---- ', j + 1); //database operation done...
           resolve();
         });
       }
@@ -209,7 +209,7 @@ async function updateImages (j){
         resolve();
       }
     }
-    else{
+    else {
       //console.log('i m here in else');
       resolve();
     }
@@ -218,25 +218,25 @@ async function updateImages (j){
   });
 }
 
-function receiveSQSMessage(){
+function receiveSQSMessage() {
   //console.log('i m here in receiveSQSMessage');
   return new Promise((resolve, reject) => {
     var params = {
-      AttributeNames: [ "SentTimestamp" ],
+      AttributeNames: ["SentTimestamp"],
       MaxNumberOfMessages: 1,
-      MessageAttributeNames: [ "All" ],
+      MessageAttributeNames: ["All"],
       QueueUrl: queueUrl,
       VisibilityTimeout: 10,
       WaitTimeSeconds: 0
     };
-    sqs.receiveMessage(params, function(err, data) {
-      if(err) {
+    sqs.receiveMessage(params, function (err, data) {
+      if (err) {
         //res.send({error:err});
-        console.log('error',err);
+        console.log('error', err);
         // updateImages function not using any catch or rejection method
         var productLog = 'Receive SQS Queue Message Error' + JSON.stringify(err);
-        log(productLog,'csv_product_images/csv-images.log');
-        resolve({error:err, status:false});
+        log(productLog, 'csv_product_images/csv-images.log');
+        resolve({ error: err, status: false });
       }
       else if (data.Messages) {
         //console.log('data',data.Messages[0].Body);
@@ -245,38 +245,38 @@ function receiveSQSMessage(){
         //deleteMessageId = data.Messages[0].ReceiptHandle;
         //console.log('deleteMessageId', data.Messages[0].ReceiptHandle);
         //console.log('******************');
-        deleteSQSMessage(data.Messages[0].ReceiptHandle).then(success =>{
+        deleteSQSMessage(data.Messages[0].ReceiptHandle).then(success => {
           if (success === 'success') {
-            resolve({product:product, status:true});
+            resolve({ product: product, status: true });
           }
-        },err=>{
-          console.log('error deleteSQSMessage',err);
+        }, err => {
+          console.log('error deleteSQSMessage', err);
           // updateImages function not using any catch or rejection method
-          resolve({error:err, status:false});
+          resolve({ error: err, status: false });
         });
       }
-      else{
+      else {
         var productLog = 'No product found in sqs queue';
-        log(productLog,'csv_product_images/csv-images.log');
+        log(productLog, 'csv_product_images/csv-images.log');
         // updateImages function not using any catch or rejection method
-        resolve({error:productLog, status:false});
+        resolve({ error: productLog, status: false });
       }
     });
   });
 }
 
-function deleteSQSMessage(id){
+function deleteSQSMessage(id) {
   //console.log('i m here in deleteSQSMessage');
   return new Promise((resolve, reject) => {
     var deleteParams = {
       QueueUrl: queueUrl,
       ReceiptHandle: id
     };
-    sqs.deleteMessage(deleteParams, function(err, data) {
+    sqs.deleteMessage(deleteParams, function (err, data) {
       if (err) {
         var message = 'SQS delete message error' + err;
         var productLog = 'Delete SQS Queue Message Error' + JSON.stringify(err);
-        log(productLog,'csv_product_images/csv-images.log');
+        log(productLog, 'csv_product_images/csv-images.log');
         reject(message);
       } else {
         resolve('success');
@@ -286,7 +286,7 @@ function deleteSQSMessage(id){
 }
 
 async function copyFile(product, userId) {
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     const header = {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.87 Safari/537.36'
     };
@@ -308,7 +308,7 @@ async function copyFile(product, userId) {
 
     async.forEachOf(validUrls, async (imageUrl, index) => {
       try {
-        const resolvedImage = await fetchImage(imageUrl, `${productImageName}-${index}`,`${product_id}`);
+        const resolvedImage = await fetchImage(imageUrl, `${productImageName}-${index}`, `${product_id}`);
         imageFiles.push(resolvedImage.data);
       } catch (err) {
         imageFilesErrorMessage.push(`${imageUrl}: ${err.message}`);
@@ -317,19 +317,19 @@ async function copyFile(product, userId) {
     }, (err) => {
       // if there any error...
       if (err) {
-        resolve ({ status: false, message: err.message });
+        resolve({ status: false, message: err.message });
       }
       // no image file able to fetch & upload...
       if (imageFiles.length == 0) {
-        resolve ( { status: false, message: imageFilesErrorMessage });
+        resolve({ status: false, message: imageFilesErrorMessage });
       }
       // lets say 2 files, one file success and one file error, so a partial success...
       if (imageFiles.length && imageFilesErrorMessage.length) {
-        resolve ({ status: true, message: imageFilesErrorMessage, files: imageFiles });
+        resolve({ status: true, message: imageFilesErrorMessage, files: imageFiles });
       }
       // files successfully uploaded...
       if (imageFiles.length) {
-        resolve ({ status: true, files: imageFiles });
+        resolve({ status: true, files: imageFiles });
       }
     });
 
@@ -385,7 +385,7 @@ async function copyFile(product, userId) {
                   let size80 = sharp(body).resize({ width: 80 }).jpeg({ quality: 100 });
 
                   let optimizedImageBuffers = [size500, size480, size250, size100, size80];
-                  let folders = ['500','480', '250', '100', '80'];
+                  let folders = ['500', '480', '250', '100', '80'];
 
                   optimizedImageBuffers.forEach((image, index) => {
                     uploadFilePromises.push(
@@ -480,10 +480,10 @@ function validateImageUrls(urlString) {
 
 function getProductArray(product) {
   let product_array = {
-    SKU:product.sku,
-    Image_Url:product.img_url,
-    Product_Name:product.name,
-    Product_Url : product.product_url,
+    SKU: product.sku,
+    Image_Url: product.img_url,
+    Product_Name: product.name,
+    Product_Url: product.product_url,
     reason: product.reason,
     Selling_Price: product.price,
     Category: product.category,
@@ -491,11 +491,11 @@ function getProductArray(product) {
   return (product_array);
 }
 
-function createLog(productsArray, message){
-  productsArray.forEach(function(product){
+function createLog(productsArray, message) {
+  productsArray.forEach(function (product) {
     product.merchant_id = merchantId;
-    var productLog = message + ' '+ JSON.stringify(product);
-    log(productLog,'csv_product_images/csv-images.log');
+    var productLog = message + ' ' + JSON.stringify(product);
+    log(productLog, 'csv_product_images/csv-images.log');
   });
 }
 

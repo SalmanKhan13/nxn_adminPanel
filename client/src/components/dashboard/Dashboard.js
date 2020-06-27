@@ -4,17 +4,17 @@ import { connect } from "react-redux";
 
 const Dashboard = ({ auth: { user } }) => {
   const uploadScript =
-    user.role === "admin"|| user.role==="teamlead" ? (
+    user.role === "admin" || user.role === "teamlead" ? (
       <Link to="/uploadproduct">Upload_File</Link>
     ) : (
-      <div className='text-success'>Upload_File</div>
-    );
+        <div className='text-success'>Upload_File</div>
+      );
   const createUser =
     user.role === "admin" ? (
       <Link to="/createuser">Create_User</Link>
     ) : (
-     <div className='text-success'>Create_User</div> 
-    );
+        <div className='text-success'>Create_User</div>
+      );
 
   return (
     <div className="content">

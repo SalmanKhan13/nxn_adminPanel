@@ -62,7 +62,7 @@ exports.test = async (req, res, next) => {
  | Get Current User
  |--------------------------------------------------------------------------
 */
-exports.getUser= async (req, res) => {
+exports.getUser = async (req, res) => {
   try {
     const users = res.locals.loggedInUser;
 
@@ -79,9 +79,9 @@ exports.getUser= async (req, res) => {
  | Get All User
  |--------------------------------------------------------------------------
 */
-exports.getAllUser= async (req, res) => {
+exports.getAllUser = async (req, res) => {
   try {
-   // const users = res.locals.loggedInUser;
+    // const users = res.locals.loggedInUser;
 
     const users = await Users.find();
     res.json(users);
@@ -99,7 +99,7 @@ exports.getAllUser= async (req, res) => {
  |--------------------------------------------------------------------------
 */
 
-exports.createUser= async (req, res) => {
+exports.createUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -159,7 +159,7 @@ exports.createUser= async (req, res) => {
  |--------------------------------------------------------------------------
 */
 
-exports.loginUser= async (req, res) => {
+exports.loginUser = async (req, res) => {
   console.log('i m here');
   const errors = validationResult(req);
 
@@ -249,7 +249,7 @@ exports.searchUser = async function (req, res) {
   }
 };
 
-const transporter = 
+const transporter =
   nodemailer.createTransport({
     service: "gmail",
     secure: "false",
@@ -304,10 +304,10 @@ exports.forgotPasswordController = async (req, res) => {
           subject: `Password Reset link`,
           html: `
                     <h1>Please use the following link to reset your password</h1>
-                    <p><a href='http://localhost:3000/reset/${token}'>http://localhost:3000/reset/${token}</a></p>
+                    <p><a https://seebiz-admin-panel.herokuapp.com/reset/${token}'>https://seebiz-admin-panel.herokuapp.com/reset/${token}</a></p>
                     <hr />
                     <p>This email may contain sensetive information</p>
-                    <p><a href='http://localhost:3000'>http://localhost:3000</a></p>
+                    <p><a href='https://seebiz-admin-panel.herokuapp.com/'>https://seebiz-admin-panel.herokuapp.com/</a></p>
                 `,
         };
 

@@ -10,7 +10,7 @@ var aws = require('aws-sdk');
 const env = process.env.NODE_ENV || 'development';
 const Product = require('../models/product.model');
 const Config = require('../config/config');
-aws.config = Config.Aws.AuthSQS[env];
+//aws.config = Config.Aws.AuthSQS[env];
 var sqs = new aws.SQS();
 const log = require('log-to-file');
 const queueUrl = "https://sqs.us-east-2.amazonaws.com/704051122323/seebiz";
@@ -92,8 +92,8 @@ exports.Import = (req, res) => {
           finalProductslength = products.length;
           for (let i = 0; i < products.length; i++) {
             //console.log('i',i);
-            await saveProduct(products[i],slug);
-            if ((i+1) === products.length) {
+            await saveProduct(products[i], slug);
+            if ((i + 1) === products.length) {
               //console.log('before call upload images script');
               this.uploadProductImages();
             }
@@ -105,17 +105,17 @@ exports.Import = (req, res) => {
             ' Duplicate Records: ', this.duplicateProducts.length,
             ' SQS Not Uploaded Products Records: ', sqs_err_products.length,
             ' Completed Records: ', products.length);
-          if(products.length <= 0){
+          if (products.length <= 0) {
             this.deleteFile();
           }
-        },err=>{
-          console.log('err',err);
+        }, err => {
+          console.log('err', err);
           console.error(err);
           this.response('danger', 'File Processing Error', err.message);
         }).catch(function (any) {
-            console.error(any);
-            this.response('danger', 'File Processing Error', any.message);
-          });
+          console.error(any);
+          this.response('danger', 'File Processing Error', any.message);
+        });
       }
       else {
         console.log('Finally Done - Rejected Records: ', ignoredProducts.length,
@@ -199,7 +199,7 @@ exports.Import = (req, res) => {
 
       if (ignoredProducts && ignoredProducts.length) {
         //console.log('ignoredProducts', ignoredProducts);
-        createLog(ignoredProducts,'ignore-product');
+        createLog(ignoredProducts, 'ignore-product');
         const csvStringify = csvWriter.createObjectCsvStringifier({ header: this.csvFileHeader });
         attachments.push({
           filename: `${fileName}-ignored.csv`,
@@ -210,7 +210,7 @@ exports.Import = (req, res) => {
 
       if (this.duplicateProducts && this.duplicateProducts.length) {
         //console.log('this.duplicateProducts', this.duplicateProducts);
-        createLog(this.duplicateProducts,'duplicate-product');
+        createLog(this.duplicateProducts, 'duplicate-product');
         // remove reason key from duplicate file
         const header = this.csvFileHeader.filter(header => header.id !== 'reason');
         // build final header
@@ -227,18 +227,18 @@ exports.Import = (req, res) => {
         EmailTemplate.csvFileRecordsFeedback({ email: this.mailReceipt, attachments: attachments });
       }
     },
-    uploadProductImages(){
+    uploadProductImages() {
       req.products_length = finalProductslength;
       req.emil = this.mailReceipt;
-     setTimeout( function(){
-       ProductImages.uploadImages(req, res).init(req.file,req.products_length,req.emil);
-      },3000);
+      setTimeout(function () {
+        ProductImages.uploadImages(req, res).init(req.file, req.products_length, req.emil);
+      }, 3000);
     },
     deleteFile() {
       fs.unlink(this.file.path, () => { });
     },
     response(type, intro, message) {
-        res.json({ 'status': type, 'intro': intro, 'message': message });
+      res.json({ 'status': type, 'intro': intro, 'message': message });
     }
   }
 };
@@ -258,11 +258,11 @@ function formatProduct(product) {
   }
 }
 
-function saveProduct(csv_product,slug) {
-  return new Promise(function(resolve) {
+function saveProduct(csv_product, slug) {
+  return new Promise(function (resolve) {
     console.log('product', csv_product.SKU);
-    const productFormat = formatProduct({...csv_product, slugPrefix: slug});
-    const  productObj = {
+    const productFormat = formatProduct({ ...csv_product, slugPrefix: slug });
+    const productObj = {
       ...productFormat,
       merchant_id: userId,
       catalogCategory: catalogId,
@@ -274,31 +274,32 @@ function saveProduct(csv_product,slug) {
     //console.log('product.Image_Url', product.Image_Url);
 
     newProduct.save(function (err, result) {
-      if ( err ) {
+      if (err) {
         product.reason = 'unable to save - db message: ' + err.message;
         ignoredProducts.push(product);
       }
       var productArray =
-        {product_id:result._id,
-          sku:csv_product.SKU,
-          merchant_id: userId,
-          img_url:csv_product.Image_Url,
-          name:csv_product.Product_Name,
-          product_url : csv_product.Product_url,
-          price: csv_product.Selling_Price,
-          category: csv_product.Category
-        };
+      {
+        product_id: result._id,
+        sku: csv_product.SKU,
+        merchant_id: userId,
+        img_url: csv_product.Image_Url,
+        name: csv_product.Product_Name,
+        product_url: csv_product.Product_url,
+        price: csv_product.Selling_Price,
+        category: csv_product.Category
+      };
       //console.log('productArray', productArray);
       var params = {
         MessageBody: JSON.stringify(productArray),
         QueueUrl: queueUrl,
         //MessageGroupId: product.SKU
       };
-      sqs.sendMessage(params, function(err, data) {
-        if(err) {
+      sqs.sendMessage(params, function (err, data) {
+        if (err) {
           console.log('danger', 'SQS Error!', err);
-          var productLog = 'Send SQS Queue Message Error '+ JSON.stringify(csv_product);
-          log(productLog,'csv_product_images/csv-images.log');
+          var productLog = 'Send SQS Queue Message Error ' + JSON.stringify(csv_product);
+          log(productLog, 'csv_product_images/csv-images.log');
           sqs_err_products.push(csv_product);
           resolve();
         }
@@ -314,10 +315,10 @@ function saveProduct(csv_product,slug) {
   });
 }
 
-function createLog(productsArray, message){
-  productsArray.forEach(function(product){
+function createLog(productsArray, message) {
+  productsArray.forEach(function (product) {
     product.merchant_id = userId;
-    var productLog = message + ' '+ JSON.stringify(product);
-    log(productLog,'csv_product_images/csv-images.log');
+    var productLog = message + ' ' + JSON.stringify(product);
+    log(productLog, 'csv_product_images/csv-images.log');
   });
 }

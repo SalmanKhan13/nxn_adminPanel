@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
-const config = require('./config');
+const config1 = require('./config');
+const config = require('config');
 const env = process.env.NODE_ENV || 'development';
-const db = config[env].db;
-//console.log('jwt', config[env]);
+//const db = config[env].db;
+const db = config.get('mongoURI')
+console.log('jwt', config1[env]);
 const connectDB = async () => {
   try {
     await mongoose.connect(db, {
@@ -21,8 +23,3 @@ const connectDB = async () => {
 };
 
 module.exports = connectDB;
-
-
-
-
-
