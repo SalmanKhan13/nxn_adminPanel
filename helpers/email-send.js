@@ -1,4 +1,4 @@
-var Mail = require("./mail");
+var Mail = require("./Mail");
 var config = require("../config/config"); // Called token secret key
 var _ = require("underscore"); // used Underscore for template settings
 var environment = process.env.NODE_ENV || "development";
@@ -28,14 +28,14 @@ exports.csvFileRecordsFeedback = function (userInfo) {
 
 function csvFileRecordsFeedbackTemplate(userInfo) {
   // Find Thank you email template
-// <<<<<<< HEAD
-//   var path = require("path").join(
-//     __dirname,
-//     "../app/views/email-template/feedback-products-bulk.html"
-//   );
-//=======
+  // <<<<<<< HEAD
+  //   var path = require("path").join(
+  //     __dirname,
+  //     "../app/views/email-template/feedback-products-bulk.html"
+  //   );
+  //=======
   var path = require('path').join(__dirname, '../views/email-template/feedback-products-bulk.html');
-//>>>>>>> ca0c83b1069245448b09d15f914819bc1ca7fc44
+  //>>>>>>> ca0c83b1069245448b09d15f914819bc1ca7fc44
 
   // Read file synchronously and encode it 'utf8'
   var html = require("fs").readFileSync(path, "utf8");
@@ -48,17 +48,3 @@ function csvFileRecordsFeedbackTemplate(userInfo) {
  | Mail Server is used for Email Sending
  |--------------------------------------------------------------------------
 */
-
-// exports.transporter =
-//   nodemailer.createTransport({
-//     service: "gmail",
-//     secure: "false",
-//     auth: {
-//       user: "salmank91922@gmail.com",
-//       pass: "asif9999",
-//     },
-//     tls: {
-//       rejectUnauthorized: false,
-//     },
-//   });
-

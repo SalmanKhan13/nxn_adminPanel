@@ -3,7 +3,7 @@ var _ = require('underscore'); // used Underscore for template settings
 const fs = require('fs');
 const csv = require('csv-parser');
 const csvWriter = require('csv-writer');
-//const sharp = require('sharp');
+const sharp = require('sharp');
 const request = require('request');
 const async = require('async');
 const URL = require("url").URL;
@@ -346,10 +346,10 @@ async function copyFile(product, userId) {
 
             if (type.toLowerCase().match(/(jpeg|jpg|gif|png)$/)) {
 
-              // async function getFileMetaData(buffer) {
-              //   const metaReader = sharp(body);
-              //   return await metaReader.metadata();
-              // }
+              async function getFileMetaData(buffer) {
+                const metaReader = sharp(body);
+                return await metaReader.metadata();
+              }
 
               // get width, height...
               getFileMetaData().then(info => {
@@ -378,34 +378,34 @@ async function copyFile(product, userId) {
                   ];
 
                   // build different sizes...
-                  // let size500 = sharp(body).resize({ width: 500 }).jpeg({ quality: 100 });
-                  // let size480 = sharp(body).resize({ width: 480 }).jpeg({ quality: 100 });
-                  // let size250 = sharp(body).resize({ width: 250 }).jpeg({ quality: 100 });
-                  // let size100 = sharp(body).resize({ width: 100 }).jpeg({ quality: 100 });
-                  // let size80 = sharp(body).resize({ width: 80 }).jpeg({ quality: 100 });
+                  let size500 = sharp(body).resize({ width: 500 }).jpeg({ quality: 100 });
+                  let size480 = sharp(body).resize({ width: 480 }).jpeg({ quality: 100 });
+                  let size250 = sharp(body).resize({ width: 250 }).jpeg({ quality: 100 });
+                  let size100 = sharp(body).resize({ width: 100 }).jpeg({ quality: 100 });
+                  let size80 = sharp(body).resize({ width: 80 }).jpeg({ quality: 100 });
 
-                  // let optimizedImageBuffers = [size500, size480, size250, size100, size80];
-                  // let folders = ['500', '480', '250', '100', '80'];
+                  let optimizedImageBuffers = [size500, size480, size250, size100, size80];
+                  let folders = ['500', '480', '250', '100', '80'];
 
-                  // optimizedImageBuffers.forEach((image, index) => {
-                  //   uploadFilePromises.push(
-                  //     new Promise((resolve, reject) => {
-                  //       const file_path = `${userId}/products/${product_id}/${folders[index]}/${fileName}`;
-                  //       //console.log('file_path',file_path);
-                  //       S3.upFile(file_path, image, type, function (err, data) {
-                  //         //console.log('err', err);
-                  //         //console.log('data', data);
-                  //         if (err) {
-                  //           // log full error to log files...
-                  //           //console.log('S3 error optimizedImageBuffers', err);
-                  //           reject(err);
-                  //         }
-                  //         //console.log('resolve data for optimized image');
-                  //         resolve(data);
-                  //       });
-                  //     })
-                  //   );
-                  // });
+                  optimizedImageBuffers.forEach((image, index) => {
+                    uploadFilePromises.push(
+                      new Promise((resolve, reject) => {
+                        const file_path = `${userId}/products/${product_id}/${folders[index]}/${fileName}`;
+                        //console.log('file_path',file_path);
+                        S3.upFile(file_path, image, type, function (err, data) {
+                          //console.log('err', err);
+                          //console.log('data', data);
+                          if (err) {
+                            // log full error to log files...
+                            //console.log('S3 error optimizedImageBuffers', err);
+                            reject(err);
+                          }
+                          //console.log('resolve data for optimized image');
+                          resolve(data);
+                        });
+                      })
+                    );
+                  });
 
                   // // start upload procedure... if main image failed to upload, no need to upload different sizes...
                   uploadFilePromises.shift().then(file => {
