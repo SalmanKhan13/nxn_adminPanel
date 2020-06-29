@@ -7,7 +7,7 @@ const db = config.get('mongoURI')
 console.log('jwt', config1[env]);
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URL || db, {
+    await mongoose.connect(db, {
       useNewUrlParser: true,
       useCreateIndex: true,
       useFindAndModify: false,
