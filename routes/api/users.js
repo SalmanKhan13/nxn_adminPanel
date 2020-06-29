@@ -15,7 +15,7 @@ router.post(
 );
 
 // @route    POST api/users/
-// @desc     Authenticate user & get token
+// @desc     Authenticate/Login user & get token
 // @access   Public
 router.post(
   "/auth",
