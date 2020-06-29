@@ -9,7 +9,7 @@ module.exports = {
   development: {
     Bucket: 'seebiz-production-s3',
     clientHost: 'http://localhost:3000',
-    db: 'mongodb://127.0.0.1/seebiz',
+    db: 'mongodb+srv://salman_khan:salman@pabbi-axayq.mongodb.net/<dbname>?retryWrites=true&w=majority',
     jwtSecret: '$secure$%^&*()!@#&^$avbg',
     elasticsearch: {
       hosts: 'localhost:9200',
@@ -32,7 +32,8 @@ module.exports = {
     Bucket: 'seebiz-production-s3',
     clientHost: 'https://seebiz.com',
     db:
-      'mongodb://seebizAdmin:Rapidws2641@seebiz-cluster-shard-00-00-zyuvk.mongodb.net:27017,seebiz-cluster-shard-00-01-zyuvk.mongodb.net:27017,seebiz-cluster-shard-00-02-zyuvk.mongodb.net:27017/seebiz?ssl=true&replicaSet=seebiz-cluster-shard-0&authSource=admin&retryWrites=true',
+      'mongodb+srv://salman_khan:salman@pabbi-axayq.mongodb.net/<dbname>?retryWrites=true&w=majority',
+    // 'mongodb://seebizAdmin:Rapidws2641@seebiz-cluster-shard-00-00-zyuvk.mongodb.net:27017,seebiz-cluster-shard-00-01-zyuvk.mongodb.net:27017,seebiz-cluster-shard-00-02-zyuvk.mongodb.net:27017/seebiz?ssl=true&replicaSet=seebiz-cluster-shard-0&authSource=admin&retryWrites=true',
     // db: 'mongodb://root:admin123@52.34.46.134:27017/sebiz',
     elasticsearch: {
       hosts: [
