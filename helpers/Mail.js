@@ -12,19 +12,14 @@ const sendMailWithAttachments = (
   next
 ) => {
   const transporter = nodemailer.createTransport({
-    host: "smtp-relay.sendinblue.com",
-    port: 587,
+
     auth: {
-      user: "zubair@seebiz.com",
-      pass: "tcHOzaqb5ZvG7Bx4"
+
     }
-    // auth: {
-    //   user: "1fe25310eaae47",
-    //   pass: "b0c568fcad0783"
-    // }
+
   });
 
-  const options = {from, to, subject, html: body};
+  const options = { from, to, subject, html: body };
   if (attachments) {
     options.attachments = attachments;
   }

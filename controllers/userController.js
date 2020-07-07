@@ -254,8 +254,7 @@ const transporter =
     service: "gmail",
     secure: "false",
     auth: {
-      user: "salmank91922@gmail.com",
-      pass: "asif9999",
+
     },
     tls: {
       rejectUnauthorized: false,

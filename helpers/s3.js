@@ -1,16 +1,14 @@
 "use strict";
 var env = process.env.NODE_ENV || "development";
-var AWS = require("aws-sdk");
 var fs = require("fs");
 var Config = require("../config/config");
 var BucketName = Config[env].Bucket;
-var IMSBuckterName = "/ims-production-bucket/";
 var Auth = {
   accessKeyId: Config.Aws.AuthStorage.accessKey,
   secretAccessKey: Config.Aws.AuthStorage.secretKey,
   // region: 'us-west-2'
 };
-var s3 = new AWS.S3(Auth);
+
 
 // Creating bucket function
 exports.bucketCreate = function (bucket_name, permission, location, next) {

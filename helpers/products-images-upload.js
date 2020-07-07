@@ -14,9 +14,8 @@ const Product = require('../models/product.model');
 const S3 = require('./s3');
 const Config = require('../config/config');
 const log = require('log-to-file');
-//aws.config = Config.Aws.AuthSQS[env];
+
 var sqs = new aws.SQS();
-const queueUrl = "https://sqs.us-east-2.amazonaws.com/704051122323/seebiz";
 var merchantId = '';
 const iconv = require('iconv-lite');
 var ignoredProducts = [];

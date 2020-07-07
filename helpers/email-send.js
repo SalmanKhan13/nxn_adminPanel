@@ -2,7 +2,7 @@ var Mail = require("./Mail");
 var config = require("../config/config"); // Called token secret key
 var _ = require("underscore"); // used Underscore for template settings
 var environment = process.env.NODE_ENV || "development";
-var awsBucketBasePath = "https://seebiz-images.s3.amazonaws.com";
+
 //const nodemailer = require("nodemailer");
 
 /*
@@ -35,7 +35,7 @@ function csvFileRecordsFeedbackTemplate(userInfo) {
   //   );
   //=======
   var path = require('path').join(__dirname, '../views/email-template/feedback-products-bulk.html');
-  //>>>>>>> ca0c83b1069245448b09d15f914819bc1ca7fc44
+
 
   // Read file synchronously and encode it 'utf8'
   var html = require("fs").readFileSync(path, "utf8");
