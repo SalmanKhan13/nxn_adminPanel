@@ -11,7 +11,7 @@ const Sidebar = () => {
     >
       <div className="logo">
         <Link to="/" className="simple-text logo-normal">
-          SeeBiz Team
+          NxN Team
         </Link>
       </div>
       <div className="sidebar-wrapper">
@@ -20,7 +20,7 @@ const Sidebar = () => {
             <NavLink
               className="nav-link"
               activeStyle={{
-                 backgroundColor: "rgb(156, 39, 176)",
+                backgroundColor: "rgb(156, 39, 176)",
                 color: "white"
               }}
               to="./dashboard"
@@ -46,7 +46,7 @@ const Sidebar = () => {
             <NavLink
               className="nav-link"
               activeStyle={{
-                 backgroundColor: "rgb(156, 39, 176)",
+                backgroundColor: "rgb(156, 39, 176)",
                 color: "white",
               }}
               to="./users"

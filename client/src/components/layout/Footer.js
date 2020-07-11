@@ -26,11 +26,11 @@ const Footer = () => {
            made in{" "}
           {new Date().getFullYear()}
           <i className="material-icons">favorite</i> by
-          <Link to="/dashboard" target="_blank"> 
-          {" "}
-            SeeBiz Team
+          <Link to="/dashboard" target="_blank">
+            {" "}
+            NxN Team
           </Link>{" "}
-          
+
         </div>
       </div>
     </footer>

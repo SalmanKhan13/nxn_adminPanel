@@ -303,10 +303,10 @@ exports.forgotPasswordController = async (req, res) => {
           subject: `Password Reset link`,
           html: `
                     <h1>Please use the following link to reset your password</h1>
-                    <p><a https://seebiz-admin-panel.herokuapp.com/reset/${token}'>https://seebiz-admin-panel.herokuapp.com/reset/${token}</a></p>
+                    <p><a https://nxn-admin-panel.herokuapp.com/reset/${token}'>https://nxn-admin-panel.herokuapp.com/reset/${token}</a></p>
                     <hr />
                     <p>This email may contain sensetive information</p>
-                    <p><a href='https://seebiz-admin-panel.herokuapp.com/'>https://seebiz-admin-panel.herokuapp.com/</a></p>
+                    <p><a href='https://nxn-admin-panel.herokuapp.com/'>https://nxn-admin-panel.herokuapp.com/</a></p>
                 `,
         };
 

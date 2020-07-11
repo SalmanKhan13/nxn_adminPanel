@@ -4,17 +4,17 @@ export const Landing = () => {
   return (
     <Fragment>
       <section className="showcases">
-     
+
         <div className="video-container">
-          <video src="https://traversymedia.com/downloads/video.mov"  autoPlay muted loop type="video/mov" />
-        </div> 
-         {/* ./assets/images/video.mov" */}
+          <video src="https://traversymedia.com/downloads/video.mov" autoPlay muted loop type="video/mov" />
+        </div>
+        {/* ./assets/images/video.mov" */}
         <div className="content">
-          <h1>SeeBiz AdminPanel</h1>
+          <h1>NxN AdminPanel</h1>
           <h3>AdminPanel for First Social Network for B2B, share posts and get
            help from other</h3>
-           <Link to="login" className='btn12'>
-              Login
+          <Link to="login" className='btn12'>
+            Login
             </Link>
         </div>
       </section>
@@ -45,7 +45,7 @@ export const Landing = () => {
         </div>
       </section>
     </Fragment>
-    
+
   );
 };
 export default Landing;
