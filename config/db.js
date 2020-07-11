@@ -4,7 +4,7 @@ const config = require('config');
 const env = process.env.NODE_ENV || 'development';
 //const db = config[env].db;
 const db = config.get('mongoURI')
-console.log('jwt', config1[env]);
+
 const connectDB = async () => {
   try {
     await mongoose.connect(db, {

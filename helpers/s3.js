@@ -3,11 +3,11 @@ var env = process.env.NODE_ENV || "development";
 var fs = require("fs");
 var Config = require("../config/config");
 var BucketName = Config[env].Bucket;
-var Auth = {
-  accessKeyId: Config.Aws.AuthStorage.accessKey,
-  secretAccessKey: Config.Aws.AuthStorage.secretKey,
-  // region: 'us-west-2'
-};
+// var Auth = {
+//   accessKeyId: Config.Aws.AuthStorage.accessKey,
+//   secretAccessKey: Config.Aws.AuthStorage.secretKey,
+//   region: 'us-west-2'
+// };
 
 
 // Creating bucket function
