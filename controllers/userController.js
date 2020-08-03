@@ -9,7 +9,6 @@ const nodemailer = require("nodemailer");
 const config = require("../config/config");
 var env = process.env.NODE_ENV || "development";
 var jwtToken = config[env].jwtSecret;
-
 /*
  |--------------------------------------------------------------------------
  | middleware for role detection
@@ -45,7 +44,7 @@ exports.allowIfLoggedin = async (req, res, next) => {
 
     if (!user)
       return res.status(401).json({
-        error: "You need to be logged in to access this route",
+        error: "You need to be logged in to access this route"
       });
     req.user = user;
     next();
@@ -113,7 +112,7 @@ exports.createUser = async (req, res) => {
     if (user) {
       return res
         .status(400)
-        .json({ errors: [{ msg: "User already exists" }] });
+        .json({ errors: [{ msg: "User already exists" }] })
     }
 
     user = new Users({
