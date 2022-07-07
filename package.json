@@ -38,7 +38,7 @@
     "lodash": "^4.17.15",
     "log-to-file": "^2.0.2",
     "mailgun-js": "^0.22.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "mongoosastic": "^4.5.1",
     "mongoose": "^5.9.3",
     "morgan": "^1.10.0",
