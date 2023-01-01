@@ -19,7 +19,7 @@
     "axios": "^0.19.2",
     "bcrypt-nodejs": "0.0.3",
     "bcryptjs": "^2.4.3",
-    "config": "^3.3.0",
+    "config": "^3.3.8",
     "cors": "^2.8.5",
     "csv-parser": "^2.3.2",
     "csv-writer": "^1.6.0",
